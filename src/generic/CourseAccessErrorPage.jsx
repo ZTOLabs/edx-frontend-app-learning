@@ -29,11 +29,11 @@ const CourseAccessErrorPage = () => {
   if (courseStatus === LOADING) {
     return (
       <>
-        <HeaderSlot />
+        {/* <HeaderSlot /> */}
         <PageLoading
           srMessage={intl.formatMessage(messages.loading)}
         />
-        <FooterSlot />
+        {/* <FooterSlot /> */}
       </>
     );
   }
@@ -42,7 +42,7 @@ const CourseAccessErrorPage = () => {
   }
   return (
     <>
-      <HeaderSlot />
+      {/* <HeaderSlot /> */}
       <main id="main-content" className="container my-5 text-center" data-testid="access-denied-main">
         <AlertList
           topic="outline"
@@ -52,7 +52,7 @@ const CourseAccessErrorPage = () => {
           }}
         />
       </main>
-      <FooterSlot />
+      {/* <FooterSlot /> */}
     </>
   );
 };

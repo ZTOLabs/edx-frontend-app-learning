@@ -17,7 +17,7 @@ const PageNotFound = () => {
 
   return (
     <>
-      <HeaderSlot />
+      {/* <HeaderSlot /> */}
       <main
         id="main-content"
         className="main-content d-flex justify-content-center align-items-center flex-column"
@@ -41,7 +41,7 @@ const PageNotFound = () => {
           )}
         </p>
       </main>
-      <FooterSlot />
+      {/* <FooterSlot /> */}
     </>
   );
 };
