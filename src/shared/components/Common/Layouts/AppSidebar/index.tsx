@@ -18,6 +18,9 @@ import { useLanguageSwitch } from 'shared/hooks/useLanguageSwitch';
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Switch } from 'shared/components/Common/Switch';
+import { useIntl } from '@edx/frontend-platform/i18n';
+import messages from 'generic/messages';
+
 import Items from './Navigation/item';
 import AppLogo from '../AppLogo';
 import UserProfile from './UserProfile';
@@ -28,27 +31,6 @@ const getBaseRoute = (pathname: string): string => {
   return segments[0] || '';
 };
 
-const appNavigation = [
-  {
-    title: 'Home',
-    url: '/',
-    icon: HomeLine,
-    isActive: false,
-  },
-  {
-    title: 'Courses',
-    url: '/courses',
-    icon: ClipboardCheck,
-    isActive: false,
-  },
-  {
-    title: 'Discover',
-    url: '/discover',
-    icon: Globe01,
-    isActive: false,
-  },
-];
-
 const appSettingItems = [
   {
     url: '/notification',
@@ -57,7 +39,30 @@ const appSettingItems = [
 ];
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
+  const intl = useIntl();
+
   const location = useLocation();
+
+  const appNavigation = useMemo(() => [
+    {
+      title: intl.formatMessage(messages.home),
+      url: '/',
+      icon: HomeLine,
+      isActive: false,
+    },
+    {
+      title: intl.formatMessage(messages.courses),
+      url: '/courses',
+      icon: ClipboardCheck,
+      isActive: false,
+    },
+    {
+      title: intl.formatMessage(messages.discover),
+      url: '/discover',
+      icon: Globe01,
+      isActive: false,
+    },
+  ], [intl]);
 
   const navItems = useMemo(() => {
     const currentBaseRoute = getBaseRoute(location.pathname);
