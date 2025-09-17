@@ -20,6 +20,8 @@ import { Switch } from 'shared/components/Common/Switch';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import messages from 'generic/messages';
 
+import HomeLineSolidIcon from 'shared/icons/HomeLineSolidIcon';
+import ClipboardCheckSolidIcon from 'shared/icons/ClipboardCheckSolidIcon';
 import Items from './Navigation/item';
 import AppLogo from '../AppLogo';
 import UserProfile from './UserProfile';
@@ -41,12 +43,14 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
       title: intl.formatMessage(messages.home),
       url: '/',
       icon: HomeLine,
+      activeIcon: HomeLineSolidIcon,
       isActive: false,
     },
     {
       title: intl.formatMessage(messages.courses),
       url: '/courses',
       icon: ClipboardCheck,
+      activeIcon: ClipboardCheckSolidIcon,
       isActive: false,
     },
     {
