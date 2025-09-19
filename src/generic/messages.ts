@@ -36,6 +36,31 @@ const messages = defineMessages({
     defaultMessage: 'homepage',
     description: 'Text for url, telling them the page they will be navigated to',
   },
+  profile: {
+    id: 'learning.navigation.profile.label',
+    defaultMessage: 'Profile',
+    description: 'The accessible label for profile navigation',
+  },
+  logOut: {
+    id: 'learning.navigation.logOut.label',
+    defaultMessage: 'Log out',
+    description: 'The accessible label for log out navigation',
+  },
+  home: {
+    id: 'learning.navigation.home.label',
+    defaultMessage: 'Home',
+    description: 'The accessible label for home navigation',
+  },
+  courses: {
+    id: 'learning.navigation.courses.label',
+    defaultMessage: 'Courses',
+    description: 'The accessible label for courses navigation',
+  },
+  discover: {
+    id: 'learning.navigation.discover.label',
+    defaultMessage: 'Discover',
+    description: 'The accessible label for discover navigation',
+  },
 });
 
 export default messages;
