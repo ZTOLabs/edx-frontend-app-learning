@@ -9,8 +9,10 @@ const config = createConfig('eslint', {
     'react/jsx-no-useless-fragment': 'off',
     'react/no-unknown-property': 'off',
     'func-names': 'off',
-    'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': 'off',
+    'react/jsx-wrap-multilines': 'off',
+    'arrow-body-style': 'off',
+    'object-curly-newline': 'off',
+    'react/function-component-definition': 'off',
   },
   settings: {
     'import/resolver': {
