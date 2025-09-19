@@ -22,6 +22,7 @@ import messages from 'generic/messages';
 
 import HomeLineSolidIcon from 'shared/icons/HomeLineSolidIcon';
 import ClipboardCheckSolidIcon from 'shared/icons/ClipboardCheckSolidIcon';
+import Globe01SolidIcon from 'shared/icons/Globe01SolidIcon';
 import Items from './Navigation/item';
 import AppLogo from '../AppLogo';
 import UserProfile from './UserProfile';
@@ -57,6 +58,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
       title: intl.formatMessage(messages.discover),
       url: '/discover',
       icon: Globe01,
+      activeIcon: Globe01SolidIcon,
       isActive: false,
     },
   ], [intl]);
@@ -71,8 +73,8 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
 
   return (
     <Sidebar
-      collapsible="icon"
-      className="tw-h-screen !tw-px-3 !tw-py-6 tw-bg-brand-25"
+      collapsible="none"
+      className="tw-h-screen !tw-px-3 !tw-py-6 !tw-bg-brand-25 tw-w-fit"
       {...props}
     >
       <SidebarHeader className="tw-flex tw-items-center tw-justify-center !tw-pb-6">
