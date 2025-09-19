@@ -94,7 +94,7 @@ subscribe(APP_READY, () => {
                             <LiveTab />
                           </TabContainer>
                         </DecodePageRoute>
-                      }
+                      )}
                     />
                     <Route
                       path={DECODE_ROUTES.DATES}
@@ -104,7 +104,7 @@ subscribe(APP_READY, () => {
                             <DatesTab />
                           </TabContainer>
                         </DecodePageRoute>
-                      }
+                      )}
                     />
                     <Route
                       path={DECODE_ROUTES.DISCUSSION}
