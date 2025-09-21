@@ -117,7 +117,9 @@ export function normalizeOutlineBlocks(courseId, blocks) {
     courses: {},
     sections: {},
     sequences: {},
+    units: {},
   };
+
   Object.values(blocks).forEach(block => {
     switch (block.type) {
       case 'course':
@@ -155,6 +157,16 @@ export function normalizeOutlineBlocks(courseId, blocks) {
           title: block.display_name,
           hideFromTOC: block.hide_from_toc,
           navigationDisabled: block.navigation_disabled,
+          unitIds: block.children || [],
+        };
+        break;
+
+      case 'vertical':
+        models.units[block.id] = {
+          complete: block.complete,
+          id: block.id,
+          title: block.display_name,
+          url: block.lms_web_url,
         };
         break;
 
@@ -181,6 +193,19 @@ export function normalizeOutlineBlocks(courseId, blocks) {
           models.sequences[sequenceId].sectionId = section.id;
         } else {
           logInfo(`Section ${section.id} has child block ${sequenceId}, but that block is not in the list of sequences.`);
+        }
+      });
+    }
+  });
+
+  Object.values(models.sequences).forEach(sequence => {
+    if (Array.isArray(sequence.unitIds)) {
+      sequence.unitIds.forEach(unitId => {
+        if (unitId in models.units) {
+          const unit = models.units[unitId];
+          unit.sequenceId = sequence.id;
+        } else {
+          logInfo(`Sequence ${sequence.id} has child block ${unitId}, but that block is not in the list of units.`);
         }
       });
     }
