@@ -18,8 +18,6 @@ const CourseSidebar = () => {
   const outline = useModel("outline", courseId);
   const progress = useModel("progress", courseId);
 
-  console.log({ progress });
-
   const {
     completeCount = 0,
     incompleteCount = 0,
@@ -38,7 +36,6 @@ const CourseSidebar = () => {
     day: "2-digit",
     year: "numeric",
   }).format(courseEndDate);
-  console.log({ courseHomeMeta, outline });
 
   const { title, org, number } = courseHomeMeta;
 
