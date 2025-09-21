@@ -1,0 +1,115 @@
+import { useState } from 'react';
+import { useIntl } from '@edx/frontend-platform/i18n';
+import { ChevronDown, ChevronRight } from '@untitledui/icons';
+import { Collapsible } from '@openedx/paragon';
+
+import classNames from 'classnames';
+import { useModel } from '../../generic/model-store';
+import CourseOutlineSection from './CourseOutlineSection';
+import { useLocation, useParams } from 'react-router';
+
+const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
+  const intl = useIntl();
+  const [isOutlineExpanded, setIsOutlineExpanded] = useState(false);
+  const { pathname } = useLocation();
+
+  const { tabs } = useModel('courseHomeMeta', courseId);
+  const tabsWithoutCourses = tabs.filter(tab => tab.slug !== 'outline');
+
+  const {
+    courseBlocks: {
+      courses,
+      sections,
+    },
+  } = useModel('outline', courseId);
+
+  const rootCourseId = courses && Object.keys(courses)[0];
+  const sectionIds = rootCourseId ? courses[rootCourseId].sectionIds : [];
+
+  const activeTab = tabsWithoutCourses.find(tab => tab.url === window.location.href);
+
+
+  const handleTabClick = (url) => {
+    if (url && url !== '#') {
+      window.location.href = url;
+    }
+  };
+
+  return (
+    <div className="tw-flex tw-flex-col tw-gap-1">
+      {/* Home Section */}
+      <button
+        type="button"
+        className={classNames('tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-rounded-[8px]', {
+          'tw-bg-brand-100 tw-text-brand-700': pathname.includes('home'),
+        })}
+        onClick={() => handleTabClick(activeTab?.url)}
+      >
+        <span className="tw-text-sm tw-font-medium">
+          {intl.formatMessage({
+            id: 'course.navigation.home',
+            defaultMessage: 'Home',
+          })}
+        </span>
+      </button>
+
+      {/* Outline Section */}
+      <Collapsible.Advanced
+        open={isOutlineExpanded}
+        onToggle={() => setIsOutlineExpanded(!isOutlineExpanded)}
+      >
+        <Collapsible.Trigger
+          className="tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]"
+        >
+          <div className="tw-flex tw-items-center tw-justify-between tw-flex-1">
+            <span className="tw-text-sm tw-font-medium">
+              {intl.formatMessage({
+                id: 'course.navigation.outline',
+                defaultMessage: 'Outline',
+              })}
+            </span>
+            <Collapsible.Visible whenClosed>
+              <ChevronRight className="tw-size-5 tw-gray-600" />
+            </Collapsible.Visible>
+            <Collapsible.Visible whenOpen>
+              <ChevronDown className="tw-size-5 tw-gray-600" />
+            </Collapsible.Visible>
+          </div>
+        </Collapsible.Trigger>
+        <Collapsible.Body>
+          <div className="tw-space-y-1">
+            {sectionIds.map((sectionId) => {
+              const section = sections[sectionId];
+              if (!section) {
+                return null;
+              }
+
+              return (
+                <CourseOutlineSection
+                  key={sectionId}
+                  section={section}
+                  courseId={courseId}
+                />
+              );
+            })}
+          </div>
+        </Collapsible.Body>
+      </Collapsible.Advanced>
+
+      {tabsWithoutCourses.map((tab) => (
+        <button
+          key={tab.slug}
+          type="button"
+          className={classNames('tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]', {
+            'tw-bg-brand-100 tw-text-brand-700': activeTab?.slug === tab.slug,
+          })}
+          onClick={() => handleTabClick(tab.url)}
+        >
+          <span className="tw-text-sm tw-font-medium">{tab.title}</span>
+        </button>
+      ))}
+    </div>
+  );
+};
+
+export default CourseOutlineDropdown;
