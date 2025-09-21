@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { Collapsible } from '@openedx/paragon';
-import { LayoutLeft } from '@untitledui/icons';
+import { useIntl } from "@edx/frontend-platform/i18n";
+import { LayoutLeft } from "@untitledui/icons";
 
-import { useModel } from '../../generic/model-store';
-import { useContextId } from '../../data/hooks';
-import CourseOutlineDropdown from './CourseOutlineDropdown';
-import Tag from './Tag';
-import messages from './messages';
+import { useModel } from "../../generic/model-store";
+import { useContextId } from "../../data/hooks";
+import CourseOutlineDropdown from "./CourseOutlineDropdown";
+import Tag from "./Tag";
+import messages from "./messages";
 import classNames from "classnames";
 
 const CourseSidebar = () => {
@@ -65,98 +64,103 @@ const CourseSidebar = () => {
         isSidebarOpen ? "tw-w-64" : "tw-w-8"
       )}
     >
-      <Collapsible
-        open={isSidebarOpen}
-        onToggle={handleToggleSidebar}
-        styling=""
-        iconWhenClosed=""
-        iconWhenOpen=""
-        title={
-          <div
-            className={classNames(
-              "tw-py-6 tw-flex tw-flex-col tw-gap-3",
-              isSidebarOpen ? "tw-px-4" : "tw-px-0 !tw-pl-2"
-            )}
-          >
-            <div className="tw-flex tw-flex-row">
-              <div className="tw-flex-1 tw-overflow-hidden">
-                <img
-                  className={classNames(
-                    "tw-w-24 tw-h-16 tw-rounded-[8px] tw-transition-all tw-duration-300 tw-ease-in-out",
-                    isSidebarOpen
-                      ? "tw-opacity-100 tw-scale-100"
-                      : "tw-opacity-0 tw-scale-95"
-                  )}
-                  src="https://placehold.co/600x400"
-                  alt="Course Thumbnail"
-                />
-              </div>
-              <div className="tw-size-6 tw-flex tw-items-center tw-justify-center tw-cursor-pointer">
-                <LayoutLeft className="tw-size-4 tw-text-gray-600" />
-              </div>
-            </div>
-            <div
-              className={classNames(
-                "tw-flex tw-flex-col tw-gap-3 tw-transition-all tw-duration-300 tw-ease-in-out",
-                isSidebarOpen
-                  ? "tw-opacity-100 tw-max-h-96"
-                  : "tw-opacity-0 tw-max-h-0 tw-overflow-hidden"
-              )}
-            >
-              <div className="tw-flex tw-flex-col tw-gap-1">
-                <div className="tw-flex tw-flex-row tw-gap-1">
-                  {chips.slice(0, 2).map((value) => {
-                    if (value) {
-                      return <Tag key={value} tagName={value} />;
-                    }
-                    return null;
-                  })}
-                </div>
-                {chips[2] && (
-                  <div className="tw-flex tw-flex-row tw-gap-1">
-                    <Tag tagName={chips[2]} />
-                  </div>
-                )}
-              </div>
-              <div className="tw-flex tw-flex-col tw-gap-1">
-                <div className="tw-self-stretch tw-justify-start tw-text-gray-900 tw-text-sm tw-font-semibold tw-leading-tight">
-                  {title}
-                </div>
-                {dueDate && (
-                  <div className="tw-text-gray-500 tw-text-xs">
-                    {intl.formatMessage(messages.dueDate, { dueDate })}
-                  </div>
-                )}
-              </div>
-              <div className="tw-flex tw-flex-col tw-gap-2">
-                <div className="tw-flex tw-flex-row tw-gap-2">
-                  <span className="tw-text-gray-700 tw-text-xs tw-font-medium">
-                    {intl.formatMessage(messages.progress, {
-                      progress: completePercentage,
-                    })}
-                  </span>
-                </div>
-                <div className="tw-w-full tw-h-[6px] tw-bg-brand-100 tw-rounded-[100px] tw-overflow-hidden">
-                  <div
-                    className="tw-h-full tw-rounded-full tw-transition-all tw-duration-300"
-                    style={{
-                      width: `${completePercentage}%`,
-                      background:
-                        "linear-gradient(0deg, #009EFD -30.65%, #2AF598 100%)",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        }
+      {/* Header Section */}
+      <div
+        className={classNames(
+          "tw-py-6 tw-flex tw-flex-col tw-gap-3",
+          isSidebarOpen ? "tw-px-4" : "tw-px-0 !tw-pl-2"
+        )}
       >
-        <Collapsible.Body className="tw-px-4 tw-pb-6">
-          <div>
-            <CourseOutlineDropdown courseId={courseId as string} />
+        <div className="tw-flex tw-flex-row">
+          <div className="tw-flex-1 tw-overflow-hidden">
+            <img
+              className={classNames(
+                "tw-w-24 tw-h-16 tw-rounded-[8px] tw-transition-all tw-duration-300 tw-ease-in-out",
+                isSidebarOpen
+                  ? "tw-opacity-100 tw-scale-100"
+                  : "tw-opacity-0 tw-scale-95"
+              )}
+              src="https://placehold.co/600x400"
+              alt="Course Thumbnail"
+            />
           </div>
-        </Collapsible.Body>
-      </Collapsible>
+          <button
+            onClick={handleToggleSidebar}
+            className="tw-size-6 tw-flex tw-items-center tw-justify-center tw-cursor-pointer tw-bg-transparent tw-border-none tw-p-0 hover:tw-bg-gray-100 tw-rounded"
+            type="button"
+            aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+          >
+            <LayoutLeft className="tw-size-4 tw-text-gray-600" />
+          </button>
+        </div>
+        <div
+          className={classNames(
+            "tw-flex tw-flex-col tw-gap-3 tw-transition-all tw-duration-300 tw-ease-in-out",
+            isSidebarOpen
+              ? "tw-opacity-100 tw-max-h-96"
+              : "tw-opacity-0 tw-max-h-0 tw-overflow-hidden"
+          )}
+        >
+          <div className="tw-flex tw-flex-col tw-gap-1">
+            <div className="tw-flex tw-flex-row tw-gap-1">
+              {chips.slice(0, 2).map((value) => {
+                if (value) {
+                  return <Tag key={value} tagName={value} />;
+                }
+                return null;
+              })}
+            </div>
+            {chips[2] && (
+              <div className="tw-flex tw-flex-row tw-gap-1">
+                <Tag tagName={chips[2]} />
+              </div>
+            )}
+          </div>
+          <div className="tw-flex tw-flex-col tw-gap-1">
+            <div className="tw-self-stretch tw-justify-start tw-text-gray-900 tw-text-sm tw-font-semibold tw-leading-tight">
+              {title}
+            </div>
+            {dueDate && (
+              <div className="tw-text-gray-500 tw-text-xs">
+                {intl.formatMessage(messages.dueDate, { dueDate })}
+              </div>
+            )}
+          </div>
+          <div className="tw-flex tw-flex-col tw-gap-2">
+            <div className="tw-flex tw-flex-row tw-gap-2">
+              <span className="tw-text-gray-700 tw-text-xs tw-font-medium">
+                {intl.formatMessage(messages.progress, {
+                  progress: completePercentage,
+                })}
+              </span>
+            </div>
+            <div className="tw-w-full tw-h-[6px] tw-bg-brand-100 tw-rounded-[100px] tw-overflow-hidden">
+              <div
+                className="tw-h-full tw-rounded-full tw-transition-all tw-duration-300"
+                style={{
+                  width: `${completePercentage}%`,
+                  background:
+                    "linear-gradient(0deg, #009EFD -30.65%, #2AF598 100%)",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Course Outline Section */}
+      <div
+        className={classNames(
+          "tw-flex-1 tw-transition-all tw-duration-300 tw-ease-in-out",
+          isSidebarOpen
+            ? "tw-opacity-100 tw-max-h-full"
+            : "tw-opacity-0 tw-max-h-0 tw-overflow-hidden"
+        )}
+      >
+        <div className="tw-px-4 tw-pb-6">
+          <CourseOutlineDropdown courseId={courseId as string} />
+        </div>
+      </div>
     </div>
   );
 };
