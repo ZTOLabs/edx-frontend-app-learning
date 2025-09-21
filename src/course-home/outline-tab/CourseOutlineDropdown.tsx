@@ -62,7 +62,12 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
         open={isOutlineExpanded}
         onToggle={() => setIsOutlineExpanded(!isOutlineExpanded)}
       >
-        <Collapsible.Trigger className="tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]">
+        <Collapsible.Trigger
+          className={classNames(
+            "tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]",
+            isOutlineExpanded && "tw-mb-1"
+          )}
+        >
           <div className="tw-flex tw-items-center tw-justify-between tw-flex-1">
             <span className="tw-text-sm tw-font-medium">
               {intl.formatMessage({
@@ -79,7 +84,7 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
           </div>
         </Collapsible.Trigger>
         <Collapsible.Body>
-          <div className="tw-space-y-1">
+          <div className="tw-flex tw-flex-col tw-gap-1">
             {sectionIds.map((sectionId) => {
               const section = sections[sectionId];
               if (!section) {
