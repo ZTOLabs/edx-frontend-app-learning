@@ -53,8 +53,8 @@ const CourseSidebar = () => {
 
   return (
     <div
-      className={`tw-h-screen tw-overflow-y-hidden tw-bg-brand-25 tw-border-0 tw-border-l tw-border-solid tw-flex tw-flex-col tw-border-l-gray-200 ${
-        isSidebarOpen ? 'tw-w-56' : 'tw-w-12'
+      className={`tw-h-screen tw-overflow-y-hidden tw-bg-brand-25 tw-border-0 tw-border-l tw-border-solid tw-flex tw-flex-col tw-border-l-gray-200 tw-transition-all tw-duration-300 tw-ease-in-out ${
+        isSidebarOpen ? "tw-w-64" : "tw-w-12"
       }`}
     >
       <Collapsible
@@ -66,73 +66,79 @@ const CourseSidebar = () => {
         title={
           <div className="tw-px-4 tw-py-6 tw-flex tw-flex-col tw-gap-3">
             <div className="tw-flex tw-flex-row">
-              <div className="tw-flex-1">
-                {isSidebarOpen && (
-                  <img
-                    className="tw-w-24 tw-h-16"
-                    src="https://placehold.co/600x400"
-                    alt="Course Thumbnail"
-                  />
-                )}
+              <div className="tw-flex-1 tw-overflow-hidden">
+                <img
+                  className={`tw-w-24 tw-h-16 tw-rounded-[8px] tw-transition-all tw-duration-300 tw-ease-in-out ${
+                    isSidebarOpen
+                      ? "tw-opacity-100 tw-scale-100"
+                      : "tw-opacity-0 tw-scale-95"
+                  }`}
+                  src="https://placehold.co/600x400"
+                  alt="Course Thumbnail"
+                />
               </div>
               <div className="tw-size-6 tw-flex tw-items-center tw-justify-center tw-cursor-pointer">
                 <LayoutLeft className="tw-size-4 tw-text-gray-600" />
               </div>
             </div>
-            {isSidebarOpen && (
-              <>
-                <div className="tw-flex tw-flex-col tw-gap-1">
+            <div
+              className={`tw-flex tw-flex-col tw-gap-3 tw-transition-all tw-duration-300 tw-ease-in-out ${
+                isSidebarOpen
+                  ? "tw-opacity-100 tw-max-h-96"
+                  : "tw-opacity-0 tw-max-h-0 tw-overflow-hidden"
+              }`}
+            >
+              <div className="tw-flex tw-flex-col tw-gap-1">
+                <div className="tw-flex tw-flex-row tw-gap-1">
+                  {chips.slice(0, 2).map((value) => {
+                    if (value) {
+                      return <Tag key={value} tagName={value} />;
+                    }
+                    return null;
+                  })}
+                </div>
+                {chips[2] && (
                   <div className="tw-flex tw-flex-row tw-gap-1">
-                    {chips.slice(0, 2).map((value) => {
-                      if (value) {
-                        return <Tag key={value} tagName={value} />;
-                      }
-                      return null;
+                    <Tag tagName={chips[2]} />
+                  </div>
+                )}
+              </div>
+              <div className="tw-flex tw-flex-col tw-gap-1">
+                <div className="tw-self-stretch tw-justify-start tw-text-gray-900 tw-text-sm tw-font-semibold tw-leading-tight">
+                  {title}
+                </div>
+                {dueDate && (
+                  <div className="tw-text-gray-500 tw-text-xs">
+                    {intl.formatMessage(messages.dueDate, { dueDate })}
+                  </div>
+                )}
+              </div>
+              <div className="tw-flex tw-flex-col tw-gap-2">
+                <div className="tw-flex tw-flex-row tw-gap-2">
+                  <span className="tw-text-gray-700 tw-text-xs tw-font-medium">
+                    {intl.formatMessage(messages.progress, {
+                      progress: completePercentage,
                     })}
-                  </div>
-                  {chips[2] && (
-                    <div className="tw-flex tw-flex-row tw-gap-1">
-                      <Tag tagName={chips[2]} />
-                    </div>
-                  )}
+                  </span>
                 </div>
-                <div className="tw-flex tw-flex-col tw-gap-1">
-                  <div className="tw-self-stretch tw-justify-start tw-text-gray-900 tw-text-sm tw-font-semibold tw-leading-tight tw-mb-1">
-                    {title}
-                  </div>
-                  {dueDate && (
-                    <div className="tw-text-gray-500 tw-text-xs">
-                      {intl.formatMessage(messages.dueDate, { dueDate })}
-                    </div>
-                  )}
+                <div className="tw-w-full tw-h-[6px] tw-bg-brand-100 tw-rounded-[100px] tw-overflow-hidden">
+                  <div
+                    className="tw-h-full tw-rounded-full tw-transition-all tw-duration-300"
+                    style={{
+                      width: `${completePercentage}%`,
+                      background:
+                        "linear-gradient(0deg, #009EFD -30.65%, #2AF598 100%)",
+                    }}
+                  />
                 </div>
-                <div className="tw-flex tw-flex-col tw-gap-2">
-                  <div className="tw-flex tw-flex-row tw-gap-2">
-                    <span className="tw-text-gray-700 tw-text-xs tw-font-medium">
-                      {intl.formatMessage(messages.progress, {
-                        progress: completePercentage,
-                      })}
-                    </span>
-                  </div>
-                  <div className="tw-w-full tw-h-[6px] tw-bg-brand-100 tw-rounded-[100px] tw-overflow-hidden">
-                    <div
-                      className="tw-h-full tw-rounded-full tw-transition-all tw-duration-300"
-                      style={{
-                        width: `${completePercentage}%`,
-                        background:
-                          'linear-gradient(0deg, #009EFD -30.65%, #2AF598 100%)',
-                      }}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
+              </div>
+            </div>
           </div>
         }
       >
         <Collapsible.Body className="tw-px-4">
           <div>
-            <CourseOutlineDropdown courseId={courseId} />
+            <CourseOutlineDropdown courseId={courseId as string} />
           </div>
         </Collapsible.Body>
       </Collapsible>
