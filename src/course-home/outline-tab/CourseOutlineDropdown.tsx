@@ -14,17 +14,24 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
   const { pathname } = useLocation();
 
   const { tabs } = useModel('courseHomeMeta', courseId);
-  const tabsWithoutCourses = tabs.filter(tab => tab.slug !== 'outline');
+  const tabsWithoutCourses = tabs.filter((tab) => tab.slug !== 'outline');
 
   const {
-    courseBlocks: {
-      courses,
-      sections,
-    },
+    courseBlocks: { courses, sections },
   } = useModel('outline', courseId);
 
   const rootCourseId = courses && Object.keys(courses)[0];
   const sectionIds = rootCourseId ? courses[rootCourseId].sectionIds : [];
+
+  // Extract slug from current URL pathname
+  // Example: /course/course-v1:MITx+CS102+2025_T1/home -> "home"
+  const getCurrentSlug = () => {
+    const pathSegments = pathname.split('/');
+    return pathSegments[pathSegments.length - 1] || 'home';
+  };
+
+  const currentSlug = getCurrentSlug();
+  const isHomeActive = currentSlug === 'home';
 
   const homeTab = tabsWithoutCourses.find(
     (tab) => tab.url === window.location.href,
@@ -44,7 +51,7 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
         className={classNames(
           'tw-w-full tw-py-[10px] tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-rounded-[8px]',
           {
-            'tw-bg-brand-100 tw-text-brand-700': pathname.includes('home'),
+            'tw-bg-brand-100 tw-text-brand-700': isHomeActive,
           },
         )}
         onClick={() => handleTabClick(homeTab?.url)}
@@ -111,8 +118,7 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
           className={classNames(
             'tw-w-full tw-py-[10px] tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]',
             {
-              'tw-bg-brand-100 tw-text-brand-700':
-                window.location.href === tab.url,
+              'tw-bg-brand-100 tw-text-brand-700': currentSlug === tab.slug,
             },
           )}
           onClick={() => handleTabClick(tab.url)}
