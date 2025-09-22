@@ -56,7 +56,7 @@ const CourseSidebar = () => {
   return (
     <div
       className={classNames(
-        "tw-h-screen tw-overflow-hidden tw-bg-brand-25 tw-border-0 tw-border-l tw-border-solid tw-flex tw-flex-col tw-border-l-gray-200 tw-transition-all tw-duration-300 tw-ease-in-out",
+        "tw-h-screen tw-overflow-hidden tw-border-0 tw-border-l tw-border-solid tw-flex tw-flex-col tw-border-l-gray-200 tw-transition-all tw-duration-300 tw-ease-in-out",
         isSidebarOpen ? "tw-w-64" : "tw-w-8"
       )}
     >

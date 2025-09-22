@@ -28,6 +28,8 @@ import ProctoringInfoPanel from './widgets/ProctoringInfoPanel';
 import AccountActivationAlert from '../../alerts/logistration-alert/AccountActivationAlert';
 import CourseHomeSectionOutlineSlot from '../../plugin-slots/CourseHomeSectionOutlineSlot';
 import CourseSidebar from "./CourseSidebar";
+import classNames from "classnames";
+import background from "../../assets/images/main-content-background.png";
 
 const OutlineTab = () => {
   const intl = useIntl();
@@ -110,7 +112,134 @@ const OutlineTab = () => {
 
   return (
     <>
-      <CourseSidebar />
+      <div className="tw-flex tw-h-full">
+        <CourseSidebar />
+        <div className="tw-flex-1 tw-p-3 tw-h-full tw-relative">
+          <div
+            className="tw-absolute tw-inset-3 tw-opacity-30 tw-scale-x-[-1] tw-z-0"
+            style={{
+              backgroundImage: `url(${background})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              borderRadius: "20px",
+            }}
+          />
+          <div
+            className={classNames(
+              "tw-relative tw-z-10 tw-h-full",
+              "tw-p-8 tw-pb-0 tw-flex-1",
+              "tw-border tw-border-white tw-border-solid",
+              "tw-rounded-[20px]",
+              "tw-flex tw-flex-col tw-gap-8 tw-overflow-y-auto"
+            )}
+          >
+            <div
+              data-learner-type={learnerType}
+              className="row w-100 mx-0 my-3 justify-content-between"
+            >
+              <div className="col-12 col-sm-auto p-0">
+                <div role="heading" aria-level="1" className="h2">
+                  {title}
+                </div>
+              </div>
+            </div>
+            <div className="row course-outline-tab">
+              <AccountActivationAlert />
+              <div className="col-12">
+                <AlertList
+                  topic="outline-private-alerts"
+                  customAlerts={{
+                    ...privateCourseAlert,
+                  }}
+                />
+              </div>
+              <div className="col col-12 col-md-8">
+                <AlertList
+                  topic="outline-course-alerts"
+                  className="mb-3"
+                  customAlerts={{
+                    ...certificateAvailableAlert,
+                    ...courseEndAlert,
+                    ...courseStartAlert,
+                    ...scheduledContentAlert,
+                  }}
+                />
+                {isSelfPaced && hasDeadlines && (
+                  <>
+                    <ShiftDatesAlert model="outline" fetch={fetchOutlineTab} />
+                    <UpgradeToShiftDatesAlert
+                      model="outline"
+                      logUpgradeLinkClick={logUpgradeToShiftDatesLinkClick}
+                    />
+                  </>
+                )}
+                <StartOrResumeCourseCard />
+                <WelcomeMessage
+                  courseId={courseId}
+                  nextElementRef={expandButtonRef}
+                />
+                {rootCourseId && (
+                  <>
+                    <div
+                      id="expand-button-row"
+                      className="row w-100 m-0 mb-3 justify-content-end"
+                    >
+                      <div className="col-12 col-md-auto p-0">
+                        <Button
+                          ref={expandButtonRef}
+                          variant="outline-primary"
+                          block
+                          onClick={() => {
+                            setExpandAll(!expandAll);
+                          }}
+                        >
+                          {expandAll
+                            ? intl.formatMessage(messages.collapseAll)
+                            : intl.formatMessage(messages.expandAll)}
+                        </Button>
+                      </div>
+                    </div>
+                    <CourseHomeSectionOutlineSlot
+                      expandAll={expandAll}
+                      sectionIds={courses[rootCourseId].sectionIds}
+                      sections={sections}
+                    />
+                  </>
+                )}
+              </div>
+              {rootCourseId && (
+                <div className="col col-12 col-md-4">
+                  <ProctoringInfoPanel />
+                  {/** Defer showing the goal widget until the ProctoringInfoPanel has resolved or has been determined as
+             disabled to avoid components bouncing around too much as screen is rendered */}
+                  {(!enableProctoredExams ||
+                    proctoringPanelStatus === "loaded") &&
+                    weeklyLearningGoalEnabled && (
+                      <WeeklyLearningGoalCard
+                        daysPerWeek={
+                          selectedGoal && "daysPerWeek" in selectedGoal
+                            ? selectedGoal.daysPerWeek
+                            : null
+                        }
+                        subscribedToReminders={
+                          selectedGoal &&
+                          "subscribedToReminders" in selectedGoal
+                            ? selectedGoal.subscribedToReminders
+                            : false
+                        }
+                      />
+                    )}
+                  <CourseTools />
+                  <CourseOutlineTabNotificationsSlot courseId={courseId} />
+                  <CourseDates />
+                  <CourseHandouts />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

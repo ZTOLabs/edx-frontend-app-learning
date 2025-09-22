@@ -43,6 +43,7 @@ import '@fontsource/plus-jakarta-sans/400.css';
 import '@fontsource/plus-jakarta-sans/500.css';
 import '@fontsource/plus-jakarta-sans/600.css';
 import '@fontsource/plus-jakarta-sans/700.css';
+import { NoTabContainer } from "./custom-tab-page";
 
 subscribe(APP_READY, () => {
   const root = createRoot(document.getElementById('root'));
@@ -70,7 +71,7 @@ subscribe(APP_READY, () => {
                       path={ROUTES.PREFERENCES_UNSUBSCRIBE}
                       element={
                         <PageWrap><PreferencesUnsubscribe /></PageWrap>
-                    }
+                      }
                     />
                     <Route
                       path={DECODE_ROUTES.ACCESS_DENIED}
@@ -80,11 +81,15 @@ subscribe(APP_READY, () => {
                       path={DECODE_ROUTES.HOME}
                       element={(
                         <DecodePageRoute>
-                          <TabContainer tab="outline" fetch={fetchOutlineTab} slice="courseHome">
+                          <NoTabContainer
+                            tab="outline"
+                            fetch={fetchOutlineTab}
+                            slice="courseHome"
+                          >
                             <OutlineTab />
-                          </TabContainer>
+                          </NoTabContainer>
                         </DecodePageRoute>
-                  )}
+  )}
                     />
                     <Route
                       path={DECODE_ROUTES.LIVE}
