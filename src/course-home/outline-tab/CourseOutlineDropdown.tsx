@@ -99,6 +99,7 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
                 />
               );
             })}
+            {isOutlineExpanded && <div className="tw-bg-gray-200 tw-h-[1px]" />}
           </div>
         </Collapsible.Body>
       </Collapsible.Advanced>
