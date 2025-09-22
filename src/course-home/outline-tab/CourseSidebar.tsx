@@ -53,6 +53,9 @@ const CourseSidebar = () => {
 
   const chips = [org, number, getCourseRun(courseId)];
 
+  // TODO: Replace with actual field from API after it is added
+  const courseThumbnail = 'https://placehold.co/600x400';
+
   return (
     <div
       className={classNames(
@@ -76,7 +79,7 @@ const CourseSidebar = () => {
                   ? 'tw-opacity-100 tw-scale-100'
                   : 'tw-opacity-0 tw-scale-95',
               )}
-              src="https://placehold.co/600x400"
+              src={courseThumbnail}
               alt="Course Thumbnail"
             />
           </div>
