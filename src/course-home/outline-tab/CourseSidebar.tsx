@@ -8,6 +8,7 @@ import CourseOutlineDropdown from "./CourseOutlineDropdown";
 import Tag from "./Tag";
 import messages from "./messages";
 import classNames from "classnames";
+import { formatToDate } from "../../utils";
 
 const CourseSidebar = () => {
   const intl = useIntl();
@@ -28,14 +29,12 @@ const CourseSidebar = () => {
     ? Number(((completeCount / numTotalUnits) * 100).toFixed(0))
     : 0;
 
-  const courseEndDate = outline?.datesWidget?.courseWidgetBlocks?.find(
+  const courseEndDate = outline?.datesWidget?.courseDateBlocks?.find(
     (block) => block?.dateType === "course-end-date"
   )?.date;
-  const dueDate = new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  }).format(courseEndDate);
+  const dueDate = courseEndDate
+    ? formatToDate(courseEndDate, "MMM Do, YYYY")
+    : undefined;
 
   const { title, org, number } = courseHomeMeta;
 
@@ -57,7 +56,7 @@ const CourseSidebar = () => {
   return (
     <div
       className={classNames(
-        "tw-h-screen tw-overflow-y-scroll tw-bg-brand-25 tw-border-0 tw-border-l tw-border-solid tw-flex tw-flex-col tw-border-l-gray-200 tw-transition-all tw-duration-300 tw-ease-in-out",
+        "tw-h-screen tw-overflow-hidden tw-bg-brand-25 tw-border-0 tw-border-l tw-border-solid tw-flex tw-flex-col tw-border-l-gray-200 tw-transition-all tw-duration-300 tw-ease-in-out",
         isSidebarOpen ? "tw-w-64" : "tw-w-8"
       )}
     >
@@ -150,7 +149,7 @@ const CourseSidebar = () => {
         className={classNames(
           "tw-flex-1 tw-transition-all tw-duration-300 tw-ease-in-out",
           isSidebarOpen
-            ? "tw-opacity-100 tw-max-h-full"
+            ? "tw-opacity-100 tw-max-h-full tw-overflow-y-auto"
             : "tw-opacity-0 tw-max-h-0 tw-overflow-hidden"
         )}
       >
