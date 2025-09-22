@@ -42,7 +42,7 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
       <button
         type="button"
         className={classNames(
-          'tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-rounded-[8px]',
+          'tw-w-full tw-py-[10px] tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-rounded-[8px]',
           {
             'tw-bg-brand-100 tw-text-brand-700': pathname.includes('home'),
           },
@@ -64,7 +64,7 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
       >
         <Collapsible.Trigger
           className={classNames(
-            'tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]',
+            'tw-w-full tw-py-[10px] tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]',
             isOutlineExpanded && 'tw-mb-1',
           )}
         >
@@ -109,7 +109,7 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
           key={tab.slug}
           type="button"
           className={classNames(
-            'tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]',
+            'tw-w-full tw-py-[10px] tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]',
             {
               'tw-bg-brand-100 tw-text-brand-700':
                 window.location.href === tab.url,
