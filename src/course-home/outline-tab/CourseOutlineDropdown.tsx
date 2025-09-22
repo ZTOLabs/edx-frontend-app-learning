@@ -4,9 +4,9 @@ import { ChevronDown, ChevronRight } from '@untitledui/icons';
 import { Collapsible } from '@openedx/paragon';
 
 import classNames from 'classnames';
+import { useLocation } from 'react-router';
 import { useModel } from '../../generic/model-store';
 import CourseOutlineSection from './CourseOutlineSection';
-import { useLocation, useParams } from 'react-router';
 
 const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
   const intl = useIntl();
@@ -27,11 +27,11 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
   const sectionIds = rootCourseId ? courses[rootCourseId].sectionIds : [];
 
   const homeTab = tabsWithoutCourses.find(
-    (tab) => tab.url === window.location.href
+    (tab) => tab.url === window.location.href,
   );
 
   const handleTabClick = (url) => {
-    if (url && url !== "#") {
+    if (url && url !== '#') {
       window.location.href = url;
     }
   };
@@ -42,17 +42,17 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
       <button
         type="button"
         className={classNames(
-          "tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-rounded-[8px]",
+          'tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-rounded-[8px]',
           {
-            "tw-bg-brand-100 tw-text-brand-700": pathname.includes("home"),
-          }
+            'tw-bg-brand-100 tw-text-brand-700': pathname.includes('home'),
+          },
         )}
         onClick={() => handleTabClick(homeTab?.url)}
       >
         <span className="tw-text-sm tw-font-medium">
           {intl.formatMessage({
-            id: "course.navigation.home",
-            defaultMessage: "Home",
+            id: 'course.navigation.home',
+            defaultMessage: 'Home',
           })}
         </span>
       </button>
@@ -64,15 +64,15 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
       >
         <Collapsible.Trigger
           className={classNames(
-            "tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]",
-            isOutlineExpanded && "tw-mb-1"
+            'tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]',
+            isOutlineExpanded && 'tw-mb-1',
           )}
         >
           <div className="tw-flex tw-items-center tw-justify-between tw-flex-1">
             <span className="tw-text-sm tw-font-medium">
               {intl.formatMessage({
-                id: "course.navigation.outline",
-                defaultMessage: "Outline",
+                id: 'course.navigation.outline',
+                defaultMessage: 'Outline',
               })}
             </span>
             <Collapsible.Visible whenClosed>
@@ -109,11 +109,11 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
           key={tab.slug}
           type="button"
           className={classNames(
-            "tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]",
+            'tw-w-full tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]',
             {
-              "tw-bg-brand-100 tw-text-brand-700":
+              'tw-bg-brand-100 tw-text-brand-700':
                 window.location.href === tab.url,
-            }
+            },
           )}
           onClick={() => handleTabClick(tab.url)}
         >

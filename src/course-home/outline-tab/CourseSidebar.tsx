@@ -1,23 +1,23 @@
 import { useState } from 'react';
-import { useIntl } from "@edx/frontend-platform/i18n";
-import { LayoutLeft } from "@untitledui/icons";
+import { useIntl } from '@edx/frontend-platform/i18n';
+import { LayoutLeft } from '@untitledui/icons';
 
-import { useModel } from "../../generic/model-store";
-import { useContextId } from "../../data/hooks";
-import CourseOutlineDropdown from "./CourseOutlineDropdown";
-import Tag from "./Tag";
-import messages from "./messages";
-import classNames from "classnames";
-import { formatToDate } from "../../utils";
+import classNames from 'classnames';
+import { useModel } from '../../generic/model-store';
+import { useContextId } from '../../data/hooks';
+import CourseOutlineDropdown from './CourseOutlineDropdown';
+import Tag from './Tag';
+import messages from './messages';
+import { formatToDate } from '../../utils';
 
 const CourseSidebar = () => {
   const intl = useIntl();
   const courseId = useContextId();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const courseHomeMeta = useModel("courseHomeMeta", courseId);
-  const outline = useModel("outline", courseId);
-  const progress = useModel("progress", courseId);
+  const courseHomeMeta = useModel('courseHomeMeta', courseId);
+  const outline = useModel('outline', courseId);
+  const progress = useModel('progress', courseId);
 
   const {
     completeCount = 0,
@@ -30,10 +30,10 @@ const CourseSidebar = () => {
     : 0;
 
   const courseEndDate = outline?.datesWidget?.courseDateBlocks?.find(
-    (block) => block?.dateType === "course-end-date"
+    (block) => block?.dateType === 'course-end-date',
   )?.date;
   const dueDate = courseEndDate
-    ? formatToDate(courseEndDate, "MMM Do, YYYY")
+    ? formatToDate(courseEndDate, 'MMM Do, YYYY')
     : undefined;
 
   const { title, org, number } = courseHomeMeta;
@@ -47,7 +47,7 @@ const CourseSidebar = () => {
     if (!courseId) {
       return null;
     }
-    const parts = courseId.split("+");
+    const parts = courseId.split('+');
     return parts[parts.length - 1];
   };
 
@@ -56,25 +56,25 @@ const CourseSidebar = () => {
   return (
     <div
       className={classNames(
-        "tw-h-screen tw-overflow-hidden tw-border-0 tw-border-l tw-border-solid tw-flex tw-flex-col tw-border-l-gray-200 tw-transition-all tw-duration-300 tw-ease-in-out",
-        isSidebarOpen ? "tw-w-64" : "tw-w-8"
+        'tw-h-screen tw-overflow-hidden tw-border-0 tw-border-l tw-border-solid tw-flex tw-flex-col tw-border-l-gray-200 tw-transition-all tw-duration-300 tw-ease-in-out',
+        isSidebarOpen ? 'tw-w-64' : 'tw-w-8',
       )}
     >
       {/* Header Section */}
       <div
         className={classNames(
-          "tw-py-6 tw-flex tw-flex-col tw-gap-3",
-          isSidebarOpen ? "tw-px-4" : "tw-px-0 !tw-pl-2"
+          'tw-py-6 tw-flex tw-flex-col tw-gap-3',
+          isSidebarOpen ? 'tw-px-4' : 'tw-px-0 !tw-pl-2',
         )}
       >
         <div className="tw-flex tw-flex-row">
           <div className="tw-flex-1 tw-overflow-hidden">
             <img
               className={classNames(
-                "tw-w-24 tw-h-16 tw-rounded-[8px] tw-transition-all tw-duration-300 tw-ease-in-out",
+                'tw-w-24 tw-h-16 tw-rounded-[8px] tw-transition-all tw-duration-300 tw-ease-in-out',
                 isSidebarOpen
-                  ? "tw-opacity-100 tw-scale-100"
-                  : "tw-opacity-0 tw-scale-95"
+                  ? 'tw-opacity-100 tw-scale-100'
+                  : 'tw-opacity-0 tw-scale-95',
               )}
               src="https://placehold.co/600x400"
               alt="Course Thumbnail"
@@ -84,17 +84,17 @@ const CourseSidebar = () => {
             onClick={handleToggleSidebar}
             className="tw-size-6 tw-flex tw-items-center tw-justify-center tw-cursor-pointer tw-bg-transparent tw-border-none tw-p-0 hover:tw-bg-gray-100 tw-rounded"
             type="button"
-            aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+            aria-label={isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
           >
             <LayoutLeft className="tw-size-4 tw-text-gray-600" />
           </button>
         </div>
         <div
           className={classNames(
-            "tw-flex tw-flex-col tw-gap-3 tw-transition-all tw-duration-300 tw-ease-in-out",
+            'tw-flex tw-flex-col tw-gap-3 tw-transition-all tw-duration-300 tw-ease-in-out',
             isSidebarOpen
-              ? "tw-opacity-100 tw-max-h-96"
-              : "tw-opacity-0 tw-max-h-0 tw-overflow-hidden"
+              ? 'tw-opacity-100 tw-max-h-96'
+              : 'tw-opacity-0 tw-max-h-0 tw-overflow-hidden',
           )}
         >
           <div className="tw-flex tw-flex-col tw-gap-1">
@@ -136,7 +136,7 @@ const CourseSidebar = () => {
                 style={{
                   width: `${completePercentage}%`,
                   background:
-                    "linear-gradient(0deg, #009EFD -30.65%, #2AF598 100%)",
+                    'linear-gradient(0deg, #009EFD -30.65%, #2AF598 100%)',
                 }}
               />
             </div>
@@ -147,10 +147,10 @@ const CourseSidebar = () => {
       {/* Course Outline Section */}
       <div
         className={classNames(
-          "tw-flex-1 tw-transition-all tw-duration-300 tw-ease-in-out",
+          'tw-flex-1 tw-transition-all tw-duration-300 tw-ease-in-out',
           isSidebarOpen
-            ? "tw-opacity-100 tw-max-h-full tw-overflow-y-auto"
-            : "tw-opacity-0 tw-max-h-0 tw-overflow-hidden"
+            ? 'tw-opacity-100 tw-max-h-full tw-overflow-y-auto'
+            : 'tw-opacity-0 tw-max-h-0 tw-overflow-hidden',
         )}
       >
         <div className="tw-px-4 tw-pb-6">
