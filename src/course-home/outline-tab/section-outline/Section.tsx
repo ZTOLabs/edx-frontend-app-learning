@@ -56,7 +56,7 @@ const Section: React.FC<Props> = ({ defaultOpen, expand, section }) => {
             {/* Header Section */}
             <div className={classNames('tw-flex tw-gap-2 tw-items-start')}>
               <div className="tw-flex tw-flex-col tw-gap-1 tw-flex-1">
-                <div className="tw-text-gray-900 tw-text-lg tw-font-bold tw-leading-7 tw-flex tw-gap-1 tw-items-center">
+                <div className="tw-text-gray-900 tw-text-lg tw-font-bold tw-leading-7 tw-flex tw-gap-2 tw-items-center">
                   <button
                     type="button"
                     className="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-border-0 tw-bg-transparent tw-p-1 !tw-cursor-default"
