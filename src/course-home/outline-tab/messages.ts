@@ -351,6 +351,16 @@ const messages = defineMessages({
     defaultMessage: '{description}',
     description: 'Used below an assignment title',
   },
+  dueDate: {
+    id: 'learning.outline.dueDate',
+    defaultMessage: 'Due date: {dueDate}',
+    description: 'Used below the course title to indicate the due date of the course',
+  },
+  progress: {
+    id: 'learning.outline.progress',
+    defaultMessage: 'Progress: {progress}%',
+    description: 'Used to indicate the progress of the course',
+  },
 });
 
 export default messages;
