@@ -1,8 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useContextId } from 'data/hooks';
-import { CheckCircle, File05 } from '@untitledui/icons';
+import { File05 } from '@untitledui/icons';
 import { useModel } from '../../../generic/model-store';
+import CheckCircle from './CheckCircle';
 
 interface Props {
   id: string;
@@ -28,7 +29,8 @@ const Unit: React.FC<Props> = ({ id }) => {
         type="button"
         className="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-border-0 tw-bg-transparent tw-p-1 !tw-cursor-default"
       >
-        <CheckCircle className={classNames(complete ? 'tw-text-green-300' : 'tw-text-gray-300', 'tw-size-4')} />
+        {/* TODO: Display icon according to complete state after we have complete icon in Figma */}
+        <CheckCircle />
       </button>
       <button
         type="button"

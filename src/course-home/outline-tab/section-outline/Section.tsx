@@ -2,10 +2,10 @@ import { Collapsible } from '@openedx/paragon';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 
-import { CheckCircle } from '@untitledui/icons';
 import { useContextId } from '../../../data/hooks';
 import { useModel } from '../../../generic/model-store';
 import SequenceLink from './SequenceLink';
+import CheckCircle from './CheckCircle';
 
 const ChevronTriangleDown = () => (
   <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,12 +61,8 @@ const Section: React.FC<Props> = ({ defaultOpen, expand, section }) => {
                     type="button"
                     className="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-border-0 tw-bg-transparent tw-p-1 !tw-cursor-default"
                   >
-                    <CheckCircle
-                      className={classNames(
-                        complete ? 'tw-text-green-300' : 'tw-text-gray-300',
-                        'tw-size-4',
-                      )}
-                    />
+                    {/* TODO: Display icon according to complete state after we have complete icon in Figma */}
+                    <CheckCircle />
                   </button>
                   {sectionHasNoUnit ? (
                     <div className="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-border-0 tw-bg-transparent tw-p-1 tw-cursor-not-allowed tw-rotate-[270deg]">
