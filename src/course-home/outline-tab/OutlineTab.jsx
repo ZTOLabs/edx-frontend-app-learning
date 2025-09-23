@@ -42,9 +42,9 @@ const OutlineTab = () => {
   const expandButtonRef = useRef();
 
   const {
-    courseBlocks: { courses, sections } = {},
-    courseGoals: { selectedGoal, weeklyLearningGoalEnabled } = {},
-    datesWidget: { courseDateBlocks } = {},
+    courseBlocks: { courses = {}, sections = {} },
+    courseGoals: { selectedGoal, weeklyLearningGoalEnabled },
+    datesWidget: { courseDateBlocks = [] },
     enableProctoredExams,
   } = useModel("outline", courseId);
 
