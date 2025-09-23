@@ -92,7 +92,7 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
         </Collapsible.Trigger>
         <Collapsible.Body>
           <div className="tw-flex tw-flex-col tw-gap-1">
-            {sectionIds.map((sectionId) => {
+            {sectionIds.map((sectionId, index) => {
               const section = sections[sectionId];
               if (!section) {
                 return null;
@@ -103,6 +103,7 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
                   key={sectionId}
                   section={section}
                   courseId={courseId}
+                  index={index}
                 />
               );
             })}
