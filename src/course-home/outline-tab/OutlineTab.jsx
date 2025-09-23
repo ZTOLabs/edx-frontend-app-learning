@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Button } from '@openedx/paragon';
+import { Button, Collapsible } from '@openedx/paragon';
 import { CourseOutlineTabNotificationsSlot } from '../../plugin-slots/CourseOutlineTabNotificationsSlot';
 import { AlertList } from '../../generic/user-messages';
 
@@ -42,9 +42,9 @@ const OutlineTab = () => {
   const expandButtonRef = useRef();
 
   const {
-    courseBlocks: { courses, sections },
+    courseBlocks: { courses, sections } = {},
     courseGoals: { selectedGoal, weeklyLearningGoalEnabled } = {},
-    datesWidget: { courseDateBlocks },
+    datesWidget: { courseDateBlocks } = {},
     enableProctoredExams,
   } = useModel("outline", courseId);
 
@@ -112,7 +112,7 @@ const OutlineTab = () => {
 
   return (
     <>
-      <div className="tw-flex tw-h-full">
+      <div className="tw-flex tw-h-full tw-flex-1">
         <CourseSidebar />
         <div className="tw-flex-1 tw-p-3 tw-h-full tw-relative">
           <div
@@ -134,113 +134,8 @@ const OutlineTab = () => {
               "tw-flex tw-flex-col tw-gap-8 tw-overflow-y-auto"
             )}
           >
-            <div
-              data-learner-type={learnerType}
-              className="row w-100 mx-0 my-3 justify-content-between"
-            >
-              <div className="col-12 col-sm-auto p-0">
-                <div
-                  role="heading"
-                  aria-level="1"
-                  className="h2 tw-break-words tw-wrap-anywhere tw-hyphens-auto"
-                >
-                  {title}
-                </div>
-              </div>
-            </div>
-            <div className="row course-outline-tab">
-              <AccountActivationAlert />
-              <div className="col-12">
-                <AlertList
-                  topic="outline-private-alerts"
-                  customAlerts={{
-                    ...privateCourseAlert,
-                  }}
-                />
-              </div>
-              <div className="col col-12 col-md-8">
-                <AlertList
-                  topic="outline-course-alerts"
-                  className="mb-3"
-                  customAlerts={{
-                    ...certificateAvailableAlert,
-                    ...courseEndAlert,
-                    ...courseStartAlert,
-                    ...scheduledContentAlert,
-                  }}
-                />
-                {isSelfPaced && hasDeadlines && (
-                  <>
-                    <ShiftDatesAlert model="outline" fetch={fetchOutlineTab} />
-                    <UpgradeToShiftDatesAlert
-                      model="outline"
-                      logUpgradeLinkClick={logUpgradeToShiftDatesLinkClick}
-                    />
-                  </>
-                )}
-                <StartOrResumeCourseCard />
-                <WelcomeMessage
-                  courseId={courseId}
-                  nextElementRef={expandButtonRef}
-                />
-                {rootCourseId && (
-                  <>
-                    <div
-                      id="expand-button-row"
-                      className="row w-100 m-0 mb-3 justify-content-end"
-                    >
-                      <div className="col-12 col-md-auto p-0">
-                        <Button
-                          ref={expandButtonRef}
-                          variant="outline-primary"
-                          block
-                          onClick={() => {
-                            setExpandAll(!expandAll);
-                          }}
-                        >
-                          {expandAll
-                            ? intl.formatMessage(messages.collapseAll)
-                            : intl.formatMessage(messages.expandAll)}
-                        </Button>
-                      </div>
-                    </div>
-                    <CourseHomeSectionOutlineSlot
-                      expandAll={expandAll}
-                      sectionIds={courses[rootCourseId].sectionIds}
-                      sections={sections}
-                    />
-                  </>
-                )}
-              </div>
-              {rootCourseId && (
-                <div className="col col-12 col-md-4">
-                  <ProctoringInfoPanel />
-                  {/** Defer showing the goal widget until the ProctoringInfoPanel has resolved or has been determined as
-             disabled to avoid components bouncing around too much as screen is rendered */}
-                  {(!enableProctoredExams ||
-                    proctoringPanelStatus === "loaded") &&
-                    weeklyLearningGoalEnabled && (
-                      <WeeklyLearningGoalCard
-                        daysPerWeek={
-                          selectedGoal && "daysPerWeek" in selectedGoal
-                            ? selectedGoal.daysPerWeek
-                            : null
-                        }
-                        subscribedToReminders={
-                          selectedGoal &&
-                          "subscribedToReminders" in selectedGoal
-                            ? selectedGoal.subscribedToReminders
-                            : false
-                        }
-                      />
-                    )}
-                  <CourseTools />
-                  <CourseOutlineTabNotificationsSlot courseId={courseId} />
-                  <CourseDates />
-                  <CourseHandouts />
-                </div>
-              )}
-            </div>
+            <span className="tw-text-2xl tw-font-semibold tw-text-gray-900">{intl.formatMessage(messages.outlineTabTitle)}</span>
+            <CourseHomeSectionOutlineSlot sections={sections} sectionIds={courses[rootCourseId].sectionIds} expandAll={expandAll} />
           </div>
         </div>
       </div>
