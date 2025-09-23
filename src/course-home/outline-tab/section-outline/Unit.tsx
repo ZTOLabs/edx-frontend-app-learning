@@ -38,7 +38,7 @@ const Unit: React.FC<Props> = ({ id }) => {
         onClick={() => navigateToUnit(url)}
       >
         <File05 className="tw-text-brand-500 tw-size-4" />
-        <span className="tw-text-gray-700 tw-font-semibold tw-text-sm tw-break-words tw-wrap-anywhere tw-hyphens-auto">{title}</span>
+        <span className="tw-text-gray-700 tw-font-semibold tw-text-sm tw-break-words tw-wrap-anywhere tw-hyphens-auto tw-text-start">{title}</span>
       </button>
     </div>
   );
