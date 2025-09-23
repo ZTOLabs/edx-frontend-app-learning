@@ -11,7 +11,7 @@ interface Props {
 const CourseHomeSectionOutlineSlot: React.FC<Props> = ({
   expandAll, sections, sectionIds,
 }) => (
-  <div className="tw-flex tw-flex-col tw-gap-4">
+  <div className="tw-flex tw-flex-col tw-gap-4 tw-mb-4">
     {sectionIds.map((sectionId) => (
       <Section
         key={sectionId}
