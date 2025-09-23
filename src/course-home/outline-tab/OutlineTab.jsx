@@ -139,7 +139,11 @@ const OutlineTab = () => {
               className="row w-100 mx-0 my-3 justify-content-between"
             >
               <div className="col-12 col-sm-auto p-0">
-                <div role="heading" aria-level="1" className="h2">
+                <div
+                  role="heading"
+                  aria-level="1"
+                  className="h2 tw-break-words tw-wrap-anywhere tw-hyphens-auto"
+                >
                   {title}
                 </div>
               </div>

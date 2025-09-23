@@ -116,7 +116,7 @@ const CourseSidebar = () => {
             )}
           </div>
           <div className="tw-flex tw-flex-col tw-gap-1">
-            <div className="tw-self-stretch tw-justify-start tw-text-gray-900 tw-text-sm tw-font-semibold tw-leading-tight">
+            <div className="tw-self-stretch tw-justify-start tw-text-gray-900 tw-text-sm tw-font-semibold tw-leading-tight tw-break-words tw-wrap-anywhere tw-hyphens-auto">
               {title}
             </div>
             {dueDate && (
