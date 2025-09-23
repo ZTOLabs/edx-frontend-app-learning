@@ -53,8 +53,7 @@ const CourseSidebar = () => {
 
   const chips = [org, number, getCourseRun(courseId)];
 
-  // TODO: Replace with actual field from API after it is added
-  const courseThumbnail = 'https://placehold.co/600x400';
+  const courseThumbnail = courseHomeMeta?.courseImageUrl || courseHomeMeta?.bannerImageUrl;
 
   return (
     <div
