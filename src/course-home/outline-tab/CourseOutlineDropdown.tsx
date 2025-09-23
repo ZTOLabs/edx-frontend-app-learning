@@ -83,10 +83,10 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
               })}
             </span>
             <Collapsible.Visible whenClosed>
-              <ChevronRight className="tw-size-5 tw-gray-600" />
+              <ChevronRight className="tw-size-5 tw-text-gray-600" />
             </Collapsible.Visible>
             <Collapsible.Visible whenOpen>
-              <ChevronDown className="tw-size-5 tw-gray-600" />
+              <ChevronDown className="tw-size-5 tw-text-gray-600" />
             </Collapsible.Visible>
           </div>
         </Collapsible.Trigger>

@@ -50,10 +50,10 @@ const CourseOutlineSection = ({ section, courseId }: CourseOutlineSectionProps) 
           {section.title}
         </span>
         <Collapsible.Visible whenClosed>
-          <ChevronRight className="tw-size-5" />
+          <ChevronRight className="tw-size-5 tw-text-gray-600" />
         </Collapsible.Visible>
         <Collapsible.Visible whenOpen>
-          <ChevronDown className="tw-size-5" />
+          <ChevronDown className="tw-size-5 tw-text-gray-600" />
         </Collapsible.Visible>
       </Collapsible.Trigger>
       <Collapsible.Body>
