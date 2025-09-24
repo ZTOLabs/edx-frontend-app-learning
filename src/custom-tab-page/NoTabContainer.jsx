@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import { OuterExamTimer } from '@edx/frontend-lib-special-exams';
 
 import TabPage from './TabPage';
-import { fetchProgressTab, fetchOutlineTab } from '../course-home/data';
 
 const NoTabContainer = (props) => {
   const {
@@ -25,10 +24,6 @@ const NoTabContainer = (props) => {
       dispatch(fetch(courseIdFromUrl, targetUserId));
     } else {
       dispatch(fetch(courseIdFromUrl));
-      // Also load progress data for outline tab since CourseSidebar needs it
-      if (tab === 'outline') {
-        dispatch(fetchProgressTab(courseIdFromUrl, targetUserId));
-      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseIdFromUrl, targetUserId]);
