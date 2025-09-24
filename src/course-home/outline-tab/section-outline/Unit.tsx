@@ -1,27 +1,23 @@
 import React from 'react';
-import classNames from 'classnames';
 import { useContextId } from 'data/hooks';
 import { File05 } from '@untitledui/icons';
+import { useNavigate } from 'react-router';
 import { useModel } from '../../../generic/model-store';
 import CheckCircle from './CheckCircle';
 
 interface Props {
   id: string;
+  sequenceId: string;
 }
 
-const Unit: React.FC<Props> = ({ id }) => {
+const Unit: React.FC<Props> = ({ id, sequenceId }) => {
+  const navigate = useNavigate();
   const courseId = useContextId();
   const {
     courseBlocks: { units },
   } = useModel('outline', courseId);
   const unit = units[id];
-  const { complete, title, url } = unit;
-
-  const navigateToUnit = (urlToNavigate: string) => {
-    if (urlToNavigate) {
-      window.location.href = urlToNavigate;
-    }
-  };
+  const { complete, title } = unit;
 
   return (
     <div className="tw-flex tw-gap-2 tw-items-center">
@@ -35,7 +31,7 @@ const Unit: React.FC<Props> = ({ id }) => {
       <button
         type="button"
         className="tw-w-fit tw-h-6 tw-flex tw-items-center tw-justify-center tw-border-0 tw-bg-transparent tw-p-1 tw-cursor-pointer tw-gap-2"
-        onClick={() => navigateToUnit(url)}
+        onClick={() => navigate(`/course/${courseId}/${sequenceId}/${id}`)}
       >
         <File05 className="tw-text-brand-500 tw-size-4" />
         <span className="tw-text-gray-700 tw-font-semibold tw-text-sm tw-break-words tw-wrap-anywhere tw-hyphens-auto tw-text-start">{title}</span>
