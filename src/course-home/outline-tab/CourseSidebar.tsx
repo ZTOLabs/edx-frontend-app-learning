@@ -17,6 +17,8 @@ const CourseSidebar = () => {
 
   const courseHomeMeta = useModel('courseHomeMeta', courseId);
   const outline = useModel('outline', courseId);
+  // TODO: We need a way to fetch outline data together with progress data
+  // Currently only outline data is fetched, so this progress object is empty
   const progress = useModel('progress', courseId);
 
   const {

@@ -1,14 +1,21 @@
+import { Collapsible } from '@openedx/paragon';
+import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { useIntl } from '@edx/frontend-platform/i18n';
-import { Collapsible, IconButton } from '@openedx/paragon';
-import { Minus, Plus } from '@openedx/paragon/icons';
 
-import { useModel } from '../../../generic/model-store';
-import genericMessages from '../../../generic/messages';
 import { useContextId } from '../../../data/hooks';
-import messages from '../messages';
-import SectionTitle from './SectionTitle';
+import { useModel } from '../../../generic/model-store';
 import SequenceLink from './SequenceLink';
+import CheckCircle from './CheckCircle';
+
+const ChevronTriangleDown = () => (
+  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0.9999 0.999674L4.9999 4.99967L8.9999 0.999674" fill="#475467" />
+    <path
+      d="M8.9999 0.333008C9.26951 0.333008 9.51258 0.495398 9.61578 0.744466C9.71897 0.993582 9.66192 1.28036 9.47125 1.47103L5.47125 5.47103C5.2109 5.73138 4.7889 5.73138 4.52855 5.47103L0.528546 1.47103C0.33788 1.28036 0.280827 0.993582 0.384014 0.744466C0.487222 0.495398 0.730289 0.333008 0.9999 0.333008H8.9999ZM4.9999 4.05697L7.39052 1.66634H2.60927L4.9999 4.05697Z"
+      fill="#475467"
+    />
+  </svg>
+);
 
 interface Props {
   defaultOpen: boolean;
@@ -21,26 +28,16 @@ interface Props {
   };
 }
 
-const Section: React.FC<Props> = ({
-  defaultOpen,
-  expand,
-  section,
-}) => {
-  const intl = useIntl();
+const Section: React.FC<Props> = ({ defaultOpen, expand, section }) => {
   const courseId = useContextId();
+  const { sequenceIds, title, complete } = section;
   const {
-    complete,
-    sequenceIds,
-    title,
-    hideFromTOC,
-  } = section;
-  const {
-    courseBlocks: {
-      sequences,
-    },
+    courseBlocks: { sequences },
   } = useModel('outline', courseId);
 
   const [open, setOpen] = useState(defaultOpen);
+
+  const sectionHasNoUnit = sequences?.[sequenceIds?.[0]]?.unitIds?.length === 0;
 
   useEffect(() => {
     setOpen(expand);
@@ -48,46 +45,63 @@ const Section: React.FC<Props> = ({
 
   useEffect(() => {
     setOpen(defaultOpen);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <li>
-      <Collapsible
-        className="mb-2"
-        styling="card-lg"
-        title={<SectionTitle {...{ complete, hideFromTOC, title }} />}
-        open={open}
-        onToggle={() => { setOpen(!open); }}
-        iconWhenClosed={(
-          <IconButton
-            alt={intl.formatMessage(messages.openSection)}
-            iconAs={Plus}
-            onClick={() => { setOpen(true); }}
-            size="sm"
-          />
-        )}
-        iconWhenOpen={(
-          <IconButton
-            alt={intl.formatMessage(genericMessages.close)}
-            iconAs={Minus}
-            onClick={() => { setOpen(false); }}
-            size="sm"
-          />
-        )}
-      >
-        <ol className="list-unstyled">
-          {sequenceIds.map((sequenceId, index) => (
-            <SequenceLink
-              key={sequenceId}
-              id={sequenceId}
-              sequence={sequences[sequenceId]}
-              first={index === 0}
-            />
-          ))}
-        </ol>
-      </Collapsible>
-    </li>
+    <>
+      <div className="tw-rounded-2xl tw-border tw-border-solid tw-border-white tw-bg-white/70 tw-py-6 tw-px-4">
+        <Collapsible.Advanced open={open} onToggle={setOpen} className="tw-w-full">
+          <div className="tw-flex tw-flex-col">
+            {/* Header Section */}
+            <div className={classNames('tw-flex tw-gap-2 tw-items-start')}>
+              <div className="tw-flex tw-flex-col tw-gap-1 tw-flex-1">
+                <div className="tw-text-gray-900 tw-text-lg tw-font-bold tw-leading-7 tw-flex tw-gap-2 tw-items-center">
+                  <button
+                    type="button"
+                    className="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-border-0 tw-bg-transparent tw-p-1 !tw-cursor-default"
+                  >
+                    {/* TODO: Display icon according to complete state after we have complete icon in Figma */}
+                    <CheckCircle />
+                  </button>
+                  {sectionHasNoUnit ? (
+                    <div className="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-border-0 tw-bg-transparent tw-p-1 tw-cursor-not-allowed tw-rotate-[270deg]">
+                      <ChevronTriangleDown />
+                    </div>
+                  ) : (
+                    <Collapsible.Trigger
+                      className={classNames(
+                        'tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-border-0 tw-bg-transparent tw-p-1 tw-cursor-pointer',
+                        !open && 'tw-rotate-[270deg]',
+                      )}
+                    >
+                      <Collapsible.Visible whenClosed>
+                        <ChevronTriangleDown />
+                      </Collapsible.Visible>
+                      <Collapsible.Visible whenOpen>
+                        <ChevronTriangleDown />
+                      </Collapsible.Visible>
+                    </Collapsible.Trigger>
+                  )}
+                  <span className="tw-flex-1 tw-break-words tw-wrap-anywhere tw-hyphens-auto">
+                    {title}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Collapsible Content */}
+            <Collapsible.Body>
+              <div className="tw-mt-6">
+                {sequenceIds.map((sequenceId) => (
+                  <SequenceLink key={sequenceId} sequence={sequences[sequenceId]} />
+                ))}
+              </div>
+            </Collapsible.Body>
+          </div>
+        </Collapsible.Advanced>
+      </div>
+    </>
   );
 };
 

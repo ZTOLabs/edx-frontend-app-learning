@@ -1,55 +1,28 @@
 import React from 'react';
-import classNames from 'classnames';
 
-import SequenceDueDate from './SequenceDueDate';
-import HiddenSequenceLink from './HiddenSequenceLink';
-import SequenceTitle from './SequenceTitle';
+import Unit from './Unit';
 
 interface Props {
-  id: string;
-  first: boolean;
   sequence: {
-    complete: boolean;
-    description: string;
-    due: string;
-    showLink: boolean;
-    title: string;
-    hideFromTOC: boolean;
+    unitIds: string[];
+    id: string;
   }
 }
 
 const SequenceLink: React.FC<Props> = ({
-  id,
-  first,
   sequence,
 }) => {
   const {
-    complete,
-    description,
-    due,
-    showLink,
-    title,
-    hideFromTOC,
+    unitIds,
+    id,
   } = sequence;
 
   return (
-    <li>
-      <div className={classNames('', { 'mt-2 pt-2 border-top border-light': !first })}>
-        <SequenceTitle
-          {...{
-            complete,
-            showLink,
-            title,
-            sequence,
-            id,
-          }}
-        />
-        {hideFromTOC && (
-          <HiddenSequenceLink />
-        )}
-        <SequenceDueDate {...{ due, id, description }} />
-      </div>
-    </li>
+    <div className="tw-flex tw-flex-col tw-pl-8 tw-gap-6">
+      {unitIds.map((unitId) => (
+        <Unit key={unitId} id={unitId} sequenceId={id} />
+      ))}
+    </div>
   );
 };
 

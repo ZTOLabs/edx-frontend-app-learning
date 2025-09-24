@@ -361,6 +361,10 @@ const messages = defineMessages({
     defaultMessage: 'Progress: {progress}%',
     description: 'Used to indicate the progress of the course',
   },
+  outlineTabTitle: {
+    id: 'learning.outline.outlineTabTitle',
+    defaultMessage: 'Content',
+  },
 });
 
 export default messages;
