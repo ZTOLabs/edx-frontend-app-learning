@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Collapsible } from '@openedx/paragon';
 
 import { ChevronDown, ChevronRight } from '@untitledui/icons';
@@ -15,7 +15,8 @@ interface CourseOutlineSectionProps {
 
 const CourseOutlineSection = ({ section, courseId, index }: CourseOutlineSectionProps) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const { sequenceId } = useParams();
+  // We don't need useParams here since we're using pathname directly
+  const { pathname } = useLocation();
 
   const {
     courseBlocks: {
@@ -25,7 +26,17 @@ const CourseOutlineSection = ({ section, courseId, index }: CourseOutlineSection
   } = useModel('outline', courseId);
 
   // Check if any unit in this section is active
-  const isActiveSection = section.sequenceIds?.some(id => id === sequenceId);
+  const isActiveSection = section.sequenceIds?.some(seqId => {
+    const sequence = sequences[seqId];
+    if (!sequence) {
+      return false;
+    }
+
+    // Check if any unit in this sequence is active
+    return sequence.unitIds?.some(uId => {
+      return pathname.includes(`/${courseId}/${seqId}/${uId}`);
+    });
+  });
 
   // Expand by default if this section contains the active unit
   useEffect(() => {
@@ -64,8 +75,8 @@ const CourseOutlineSection = ({ section, courseId, index }: CourseOutlineSection
 
             if (!sequence) { return null; }
 
-            return sequence.unitIds.map((unitId) => {
-              const unit = units[unitId];
+            return sequence.unitIds.map((uId) => {
+              const unit = units[uId];
               if (!unit) { return null; }
 
               return <CourseOutlineUnit unit={unit} courseId={courseId} sequenceId={seqId} key={unit.id} />;
