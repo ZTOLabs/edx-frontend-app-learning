@@ -59,8 +59,8 @@ const CourseOutlineSection = ({ section, courseId, index }: CourseOutlineSection
       </Collapsible.Trigger>
       <Collapsible.Body>
         <div className="tw-flex tw-flex-col tw-gap-1">
-          {section.sequenceIds.map((sequenceId) => {
-            const sequence = sequences[sequenceId];
+          {section.sequenceIds.map((seqId) => {
+            const sequence = sequences[seqId];
 
             if (!sequence) { return null; }
 
@@ -68,7 +68,7 @@ const CourseOutlineSection = ({ section, courseId, index }: CourseOutlineSection
               const unit = units[unitId];
               if (!unit) { return null; }
 
-              return <CourseOutlineUnit unit={unit} key={unit.id} />;
+              return <CourseOutlineUnit unit={unit} courseId={courseId} sequenceId={seqId} key={unit.id} />;
             });
           })}
         </div>

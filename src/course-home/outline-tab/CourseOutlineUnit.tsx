@@ -1,6 +1,6 @@
 import { File05 } from '@untitledui/icons';
 import classNames from 'classnames';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface CourseOutlineUnitProps {
   unit: {
@@ -9,37 +9,21 @@ interface CourseOutlineUnitProps {
     complete: boolean;
     url: string;
   };
+  courseId: string;
+  sequenceId: string;
 }
 
-const CourseOutlineUnit = ({ unit }: CourseOutlineUnitProps) => {
-  const { title, url } = unit;
+const CourseOutlineUnit = ({ unit, courseId, sequenceId }: CourseOutlineUnitProps) => {
+  const { title, id } = unit;
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
-  // Extract slug from current URL pathname
-  const getCurrentSlug = () => {
-    const pathSegments = pathname.split('/');
-    return pathSegments[pathSegments.length - 1] || 'home';
-  };
+  // Check if this unit is currently active
+  const isActive = pathname.includes(`/${courseId}/${sequenceId}/${id}`);
 
-  // Extract slug from unit URL
-  const getUnitSlug = (unitUrl: string) => {
-    if (unitUrl.startsWith('http')) {
-      const urlObj = new URL(unitUrl);
-      const pathSegments = urlObj.pathname.split('/');
-      return pathSegments[pathSegments.length - 1] || 'home';
-    }
-    const pathSegments = unitUrl.split('/');
-    return pathSegments[pathSegments.length - 1] || 'home';
-  };
-
-  const currentSlug = getCurrentSlug();
-  const unitSlug = getUnitSlug(url);
-  const isActive = currentSlug === unitSlug;
-
-  const navigateToUnit = (url: string) => {
-    if (url && url !== '#') {
-      window.location.href = url;
-    }
+  const navigateToUnit = () => {
+    const targetPath = `/course/${courseId}/${sequenceId}/${id}`;
+    navigate(targetPath);
   };
 
   if (!unit) {
@@ -55,7 +39,7 @@ const CourseOutlineUnit = ({ unit }: CourseOutlineUnitProps) => {
           'tw-bg-brand-100 tw-text-brand-700': isActive,
         },
       )}
-      onClick={() => navigateToUnit(url)}
+      onClick={navigateToUnit}
     >
       <File05 className="tw-size-4 tw-text-brand-700" />
       <span className="tw-text-xs tw-font-medium tw-text-gray-700 tw-text-start">
