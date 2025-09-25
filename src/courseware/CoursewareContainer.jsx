@@ -12,7 +12,7 @@ import {
   getSequenceForUnitDeprecated,
   saveSequencePosition,
 } from './data';
-import { TabPage } from '../tab-page';
+import { TabPage } from '../custom-tab-page';
 
 import Course from './course';
 import { handleNextSectionCelebration } from './course/celebration';
@@ -303,14 +303,24 @@ class CoursewareContainer extends Component {
     );
   }
 
-  handleUnitNavigationClick = () => {
+  handleUnitNavigationClick = (destinationUnitId) => {
     const {
       courseId,
       sequenceId,
       routeUnitId,
+      navigate,
+      isPreview,
     } = this.props;
 
+    // Check completion for current unit before navigating
     this.props.checkBlockCompletion(courseId, sequenceId, routeUnitId);
+
+    // Navigate to the new unit
+    if (destinationUnitId) {
+      const baseUrl = `/course/${courseId}/${sequenceId}`;
+      const sequenceUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
+      navigate(`${sequenceUrl}/${destinationUnitId}`);
+    }
   };
 
   handleNextSequenceClick = () => {

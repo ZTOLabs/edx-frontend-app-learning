@@ -47,20 +47,16 @@ const Unit = ({
   const iframeUrl = getUrl();
 
   return (
-    <div className="unit">
-      <UnitTitleSlot unitId={id} {...{ unit, isEnabledOutlineSidebar, renderUnitNavigation }} />
-      <UnitSuspense {...{ courseId, id }} />
-      <ContentIFrame
-        elementId="unit-iframe"
-        id={id}
-        iframeUrl={iframeUrl}
-        loadingMessage={formatMessage(messages.loadingSequence)}
-        onLoaded={onLoaded}
-        shouldShowContent={!shouldDisplayHonorCode && !examAccess.blockAccess}
-        title={unit.title}
-        courseId={courseId}
-      />
-    </div>
+    <ContentIFrame
+      elementId="unit-iframe"
+      id={id}
+      iframeUrl={iframeUrl}
+      loadingMessage={formatMessage(messages.loadingSequence)}
+      onLoaded={onLoaded}
+      shouldShowContent={!shouldDisplayHonorCode && !examAccess.blockAccess}
+      title={unit.title}
+      courseId={courseId}
+    />
   );
 };
 

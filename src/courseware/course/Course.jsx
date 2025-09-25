@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getConfig } from '@edx/frontend-platform';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { breakpoints, useWindowSize } from '@openedx/paragon';
+import { useWindowSize } from '@openedx/paragon';
+import { useIntl } from '@edx/frontend-platform/i18n';
+import classNames from 'classnames';
+import { ArrowLeft, ArrowRight, File05 } from '@untitledui/icons';
 
-import { AlertList } from '@src/generic/user-messages';
 import { useModel } from '@src/generic/model-store';
-import { getCoursewareOutlineSidebarSettings } from '../data/selectors';
-import Chat from './chat/Chat';
+import CourseSidebar from 'course-home/outline-tab/CourseSidebar';
+import background from '../../assets/images/main-content-background.png';
+import messages from './messages';
+import Button from '../../shared/components/Common/Button';
+import { useSequenceNavigationMetadata } from './sequence/sequence-navigation/hooks';
+import { shouldCelebrateOnSectionLoad } from './celebration';
+import { GetCourseExitNavigation } from './course-exit';
+import Sequence from './sequence';
 import SidebarProvider from './sidebar/SidebarContextProvider';
 import NewSidebarProvider from './new-sidebar/SidebarContextProvider';
-import { NotificationsDiscussionsSidebarTriggerSlot } from '../../plugin-slots/NotificationsDiscussionsSidebarTriggerSlot';
-import { CelebrationModal, shouldCelebrateOnSectionLoad, WeeklyGoalCelebrationModal } from './celebration';
-import ContentTools from './content-tools';
-import Sequence from './sequence';
-import { CourseOutlineMobileSidebarTriggerSlot } from '../../plugin-slots/CourseOutlineMobileSidebarTriggerSlot';
-import { CourseBreadcrumbsSlot } from '../../plugin-slots/CourseBreadcrumbsSlot';
 
 const Course = ({
   courseId,
@@ -26,55 +28,76 @@ const Course = ({
   nextSequenceHandler,
   previousSequenceHandler,
   unitNavigationHandler,
-  windowWidth,
 }) => {
+  const intl = useIntl();
   const course = useModel('coursewareMeta', courseId);
-  const {
-    celebrations,
-    isStaff,
-    isNewDiscussionSidebarViewEnabled,
-    originalUserIsStaff,
-  } = useModel('courseHomeMeta', courseId);
+  const { celebrations, originalUserIsStaff } = useModel('courseHomeMeta', courseId);
   const sequence = useModel('sequences', sequenceId);
   const section = useModel('sections', sequence ? sequence.sectionId : null);
-  const { enableNavigationSidebar } = useSelector(getCoursewareOutlineSidebarSettings);
-  const navigationDisabled = enableNavigationSidebar || (sequence?.navigationDisabled ?? false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const { isNewDiscussionSidebarViewEnabled } = useModel('courseHomeMeta', courseId);
 
   if (!originalUserIsStaff && pathname.startsWith('/preview')) {
     const courseUrl = pathname.replace('/preview', '');
     navigate(courseUrl, { replace: true });
   }
 
-  const pageTitleBreadCrumbs = [
-    sequence,
-    section,
-    course,
-  ].filter(element => element != null).map(element => element.title);
+  const pageTitleBreadCrumbs = [sequence, section, course]
+    .filter((element) => element != null)
+    .map((element) => element.title);
 
   // Below the tabs, above the breadcrumbs alerts (appearing in the order listed here)
   const dispatch = useDispatch();
 
-  const [firstSectionCelebrationOpen, setFirstSectionCelebrationOpen] = useState(false);
-  // If streakLengthToCelebrate is populated, that modal takes precedence. Wait til the next load to display
-  // the weekly goal celebration modal.
-  const [weeklyGoalCelebrationOpen, setWeeklyGoalCelebrationOpen] = useState(
-    celebrations && !celebrations.streakLengthToCelebrate && celebrations.weeklyGoal,
-  );
-  const shouldDisplayChat = windowWidth >= breakpoints.medium.minWidth;
-  const daysPerWeek = course?.courseGoals?.selectedGoal?.daysPerWeek;
+  const [, setFirstSectionCelebrationOpen] = useState(false);
 
   useEffect(() => {
     const celebrateFirstSection = celebrations && celebrations.firstSection;
-    setFirstSectionCelebrationOpen(shouldCelebrateOnSectionLoad(
-      courseId,
-      sequenceId,
-      celebrateFirstSection,
-      dispatch,
-      celebrations,
-    ));
-  }, [sequenceId]);
+    setFirstSectionCelebrationOpen(
+      shouldCelebrateOnSectionLoad(
+        courseId,
+        sequenceId,
+        celebrateFirstSection,
+        dispatch,
+        celebrations,
+      ),
+    );
+  }, [sequenceId, celebrations, courseId, dispatch]);
+
+  const unit = useModel('units', unitId);
+  const { title } = unit;
+
+  // Navigation metadata and handlers
+  const {
+    isFirstUnit,
+    isLastUnit,
+  } = useSequenceNavigationMetadata(sequenceId, unitId);
+
+  const handleNavigate = (destinationUnitId) => {
+    unitNavigationHandler(destinationUnitId);
+  };
+
+  const handleNext = () => {
+    const nextIndex = sequence.unitIds.indexOf(unitId) + 1;
+    const newUnitId = sequence.unitIds[nextIndex];
+    handleNavigate(newUnitId);
+
+    if (nextIndex >= sequence.unitIds.length) {
+      nextSequenceHandler();
+    }
+  };
+
+  const handlePrevious = () => {
+    const previousIndex = sequence.unitIds.indexOf(unitId) - 1;
+    const newUnitId = sequence.unitIds[previousIndex];
+    handleNavigate(newUnitId);
+
+    if (previousIndex < 0) {
+      previousSequenceHandler();
+    }
+  };
 
   const SidebarProviderComponent = isNewDiscussionSidebarViewEnabled ? NewSidebarProvider : SidebarProvider;
 
@@ -83,57 +106,79 @@ const Course = ({
       <Helmet>
         <title>{`${pageTitleBreadCrumbs.join(' | ')} | ${getConfig().SITE_NAME}`}</title>
       </Helmet>
-      <div className="position-relative d-flex align-items-xl-center mb-4 mt-1 flex-column flex-xl-row">
-        {navigationDisabled || (
-        <>
-          <CourseBreadcrumbsSlot
-            courseId={courseId}
-            sectionId={section ? section.id : null}
-            sequenceId={sequenceId}
-            isStaff={isStaff}
-            unitId={unitId}
-          />
-        </>
-        )}
-        {shouldDisplayChat && (
-          <>
-            <Chat
-              enabled={course.learningAssistantEnabled}
-              enrollmentMode={course.enrollmentMode}
-              isStaff={isStaff}
-              courseId={courseId}
-              contentToolsEnabled={course.showCalculator || course.notes.enabled}
-              unitId={unitId}
+      <div className="tw-h-screen tw-w-full tw-relative">
+        <div className="tw-flex tw-h-full">
+          <CourseSidebar courseId={courseId} />
+          <div className="tw-flex-1 tw-p-3 tw-h-full tw-relative">
+            <div
+              className="tw-absolute tw-inset-3 tw-opacity-30 tw-scale-x-[-1] tw-z-0"
+              style={{
+                backgroundImage: `url(${background})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '20px',
+              }}
             />
-          </>
-        )}
-        <div className="w-100 d-flex align-items-center">
-          <CourseOutlineMobileSidebarTriggerSlot />
-          <NotificationsDiscussionsSidebarTriggerSlot courseId={courseId} />
+            <div
+              className={classNames(
+                'tw-relative tw-z-10 tw-h-full',
+                'tw-p-8 tw-pb-0 tw-flex-1',
+                'tw-border tw-border-white tw-border-solid',
+                'tw-rounded-[20px]',
+                'tw-flex tw-flex-col tw-gap-8 tw-overflow-y-auto',
+              )}
+            >
+              <div className="tw-flex tw-gap-3">
+                <div className="tw-flex tw-flex-col tw-gap-2 tw-flex-1">
+                  <div className="tw-flex tw-items-center tw-gap-2">
+                    <File05 className="tw-text-brand-500 tw-size-4" />
+                    <span className="tw-text-gray-700 tw-text-sm tw-font-semibold">
+                      {intl.formatMessage(messages.pageTitle)}
+                    </span>
+                  </div>
+                  <span className="tw-text-xl tw-font-semibold tw-text-gray-900 tw-break-words tw-wrap-anywhere tw-hyphens-auto">
+                    {title}
+                  </span>
+                </div>
+                <div className="tw-flex tw-gap-3">
+                  <Button
+                    variant="secondaryGray"
+                    size="sm"
+                    iconBefore={ArrowLeft}
+                    labels={{ default: intl.formatMessage(messages.previousButtonText) }}
+                    className="!tw-h-10 !tw-w-32"
+                    onClick={handlePrevious}
+                    disabled={isFirstUnit}
+                  />
+                  <Button
+                    variant="secondaryGray"
+                    size="sm"
+                    iconAfter={ArrowRight}
+                    labels={{
+                      default: intl.formatMessage(messages.nextButtonText),
+                    }}
+                    className="!tw-h-10 !tw-w-32"
+                    onClick={handleNext}
+                    disabled={isLastUnit}
+                  />
+                </div>
+              </div>
+
+              <div className="tw-flex-1 tw-overflow-y-auto tw-mb-8">
+                <Sequence
+                  unitId={unitId}
+                  sequenceId={sequenceId}
+                  courseId={courseId}
+                  unitNavigationHandler={unitNavigationHandler}
+                  nextSequenceHandler={nextSequenceHandler}
+                  previousSequenceHandler={previousSequenceHandler}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <AlertList topic="sequence" />
-      <Sequence
-        unitId={unitId}
-        sequenceId={sequenceId}
-        courseId={courseId}
-        unitNavigationHandler={unitNavigationHandler}
-        nextSequenceHandler={nextSequenceHandler}
-        previousSequenceHandler={previousSequenceHandler}
-      />
-      <CelebrationModal
-        courseId={courseId}
-        isOpen={firstSectionCelebrationOpen}
-        onClose={() => setFirstSectionCelebrationOpen(false)}
-      />
-      <WeeklyGoalCelebrationModal
-        courseId={courseId}
-        daysPerWeek={daysPerWeek}
-        isOpen={weeklyGoalCelebrationOpen}
-        onClose={() => setWeeklyGoalCelebrationOpen(false)}
-      />
-      <ContentTools course={course} />
     </SidebarProviderComponent>
   );
 };
@@ -145,7 +190,6 @@ Course.propTypes = {
   nextSequenceHandler: PropTypes.func.isRequired,
   previousSequenceHandler: PropTypes.func.isRequired,
   unitNavigationHandler: PropTypes.func.isRequired,
-  windowWidth: PropTypes.number.isRequired,
 };
 
 Course.defaultProps = {

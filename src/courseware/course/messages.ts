@@ -31,6 +31,21 @@ const messages = defineMessages({
     defaultMessage: 'You have no new notifications at this time.',
     description: 'Text displayed when the learner has no notifications',
   },
+  pageTitle: {
+    id: 'courseware.page.title',
+    defaultMessage: 'Unit',
+    description: 'Title text displayed for the courseware page',
+  },
+  previousButtonText: {
+    id: 'courseware.previous.button.text',
+    defaultMessage: 'Previous',
+    description: 'Text displayed for the previous button',
+  },
+  nextButtonText: {
+    id: 'courseware.next.button.text',
+    defaultMessage: 'Next',
+    description: 'Text displayed for the next button',
+  },
 });
 
 export default messages;

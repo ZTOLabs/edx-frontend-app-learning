@@ -161,57 +161,16 @@ const Sequence = ({
 
   const defaultContent = (
     <>
-      <div className="sequence-container d-inline-flex flex-row w-100">
-        <CourseOutlineSidebarTriggerSlot
-          sectionId={section ? section.id : null}
-          sequenceId={sequenceId}
-          isStaff={isStaff}
-          unitId={unitId}
-        />
-        <CourseOutlineSidebarSlot />
-        <div className="sequence w-100">
-          {!isEnabledOutlineSidebar && (
-            <div className="sequence-navigation-container">
-              <SequenceNavigation
-                sequenceId={sequenceId}
-                unitId={unitId}
-                nextHandler={() => {
-                  logEvent('edx.ui.lms.sequence.next_selected', 'top');
-                  handleNext();
-                }}
-                onNavigate={(destinationUnitId) => {
-                  logEvent('edx.ui.lms.sequence.tab_selected', 'top', destinationUnitId);
-                  handleNavigate(destinationUnitId);
-                }}
-                previousHandler={() => {
-                  logEvent('edx.ui.lms.sequence.previous_selected', 'top');
-                  handlePrevious();
-                }}
-                {...{
-                  nextSequenceHandler,
-                  handleNavigate,
-                }}
-              />
-            </div>
-          )}
-
-          <div className="unit-container flex-grow-1 pt-4">
-            <SequenceContent
-              courseId={courseId}
-              gated={gated}
-              sequenceId={sequenceId}
-              unitId={unitId}
-              unitLoadedHandler={handleUnitLoaded}
-              isOriginalUserStaff={originalUserIsStaff}
-              isEnabledOutlineSidebar={isEnabledOutlineSidebar}
-              renderUnitNavigation={renderUnitNavigation}
-            />
-            {unitHasLoaded && renderUnitNavigation(false)}
-          </div>
-        </div>
-        <NotificationsDiscussionsSidebarSlot courseId={courseId} />
-      </div>
-      <SequenceContainerSlot courseId={courseId} unitId={unitId} />
+      <SequenceContent
+        courseId={courseId}
+        gated={gated}
+        sequenceId={sequenceId}
+        unitId={unitId}
+        unitLoadedHandler={handleUnitLoaded}
+        isOriginalUserStaff={originalUserIsStaff}
+        isEnabledOutlineSidebar={isEnabledOutlineSidebar}
+        renderUnitNavigation={renderUnitNavigation}
+      />
     </>
   );
 
@@ -227,7 +186,6 @@ const Sequence = ({
         >
           {defaultContent}
         </SequenceExamWrapper>
-        <CourseLicense license={license || undefined} />
       </div>
     );
   }
