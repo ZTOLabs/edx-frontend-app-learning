@@ -329,6 +329,8 @@ class CoursewareContainer extends Component {
       nextSequence,
       sequence,
       sequenceId,
+      navigate,
+      isPreview,
     } = this.props;
 
     if (nextSequence !== null) {
@@ -336,10 +338,28 @@ class CoursewareContainer extends Component {
       if (celebrateFirstSection && sequence.sectionId !== nextSequence.sectionId) {
         handleNextSectionCelebration(sequenceId, nextSequence.id);
       }
+
+      // Navigate to the next sequence
+      const baseUrl = `/course/${this.props.courseId}`;
+      const courseUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
+      navigate(`${courseUrl}/${nextSequence.id}`);
     }
   };
 
-  handlePreviousSequenceClick = () => {};
+  handlePreviousSequenceClick = () => {
+    const {
+      previousSequence,
+      navigate,
+      isPreview,
+    } = this.props;
+
+    if (previousSequence !== null) {
+      // Navigate to the previous sequence
+      const baseUrl = `/course/${this.props.courseId}`;
+      const courseUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
+      navigate(`${courseUrl}/${previousSequence.id}`);
+    }
+  };
 
   render() {
     const {
