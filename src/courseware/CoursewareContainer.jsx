@@ -354,10 +354,10 @@ class CoursewareContainer extends Component {
     } = this.props;
 
     if (previousSequence !== null) {
-      // Navigate to the previous sequence
+      // Navigate to the last unit of the previous sequence
       const baseUrl = `/course/${this.props.courseId}`;
       const courseUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
-      navigate(`${courseUrl}/${previousSequence.id}`);
+      navigate(`${courseUrl}/${previousSequence.id}/last`);
     }
   };
 
