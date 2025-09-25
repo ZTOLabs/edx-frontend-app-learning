@@ -59,7 +59,7 @@ const CourseOutlineSection = ({ section, courseId, index }: CourseOutlineSection
         )}
       >
         <span className="tw-text-xs tw-font-bold tw-text-gray-700 tw-flex-1">
-          {index + 1}. {section.title}
+          {section.title}
         </span>
         <Collapsible.Visible whenClosed>
           <ChevronRight className="tw-size-5 tw-text-gray-600" />
