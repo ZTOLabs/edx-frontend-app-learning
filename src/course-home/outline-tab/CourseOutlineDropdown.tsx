@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { ChevronDown, ChevronRight } from '@untitledui/icons';
 import { Collapsible } from '@openedx/paragon';
@@ -11,18 +11,13 @@ import CourseOutlineSection from './CourseOutlineSection';
 const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const [isOutlineExpanded, setIsOutlineExpanded] = useState(false);
   const { pathname } = useLocation();
-
-  // Auto-expand outline if we're on a unit page (not home)
-  useEffect(() => {
+  const [isOutlineExpanded, setIsOutlineExpanded] = useState(() => {
     const isOnUnitPage = pathname.includes(`/course/${courseId}/`)
       && !pathname.endsWith('/home')
       && pathname !== `/course/${courseId}`;
-    if (isOnUnitPage) {
-      setIsOutlineExpanded(true);
-    }
-  }, [pathname, courseId]);
+    return isOnUnitPage;
+  });
 
   const { tabs } = useModel('courseHomeMeta', courseId);
   const tabsWithoutCourses = tabs.filter((tab) => !['outline', 'courseware'].includes(tab.slug));
