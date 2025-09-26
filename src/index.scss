@@ -316,6 +316,25 @@ body, html {
 .unit-iframe-wrapper {
   width: 100%;
   margin: 0;
+
+  // TODO: Originally OpenEdX has a fix for displaying some XBlocks correctly 
+  // in mobile (below code) but this only works with their original layout 
+  // implementation. We'll need to revisit this when we implement the mobile
+  // layout of Unit Details at src/courseware/CoursewareContainer.jsx
+
+  // margin-top: 0;
+  // // Some XBlocks (such as xblock-drag-and-drop-v2) rely on the viewport width
+  // // to determine their layout on mobile. This is problematic because the
+  // // viewport width may not be the same as the width of the iframe. To fix this,
+  // // here we compensate for the padding of the parent div with "container-xl"
+  // // class to ensure that the viewport width is the same as the width of the
+  // // iframe.
+  // margin-left: -$grid-gutter-width * .5;
+  // margin-right: -$grid-gutter-width * .5;
+  // margin-bottom: 2rem;
+  // @media (min-width: 830px) {
+  //   margin: 0 -40px 2rem;
+  // }
 }
 
 #unit-iframe {
