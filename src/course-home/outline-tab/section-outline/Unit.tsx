@@ -4,6 +4,7 @@ import { File05 } from '@untitledui/icons';
 import { useNavigate } from 'react-router';
 import { useModel } from '../../../generic/model-store';
 import CheckCircle from './CheckCircle';
+import CheckCircleComplete from './CheckCircleComplete';
 
 interface Props {
   id: string;
@@ -25,8 +26,7 @@ const Unit: React.FC<Props> = ({ id, sequenceId }) => {
         type="button"
         className="tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center tw-border-0 tw-bg-transparent tw-p-1 !tw-cursor-default"
       >
-        {/* TODO: Display icon according to complete state after we have complete icon in Figma */}
-        <CheckCircle />
+        {complete ? <CheckCircleComplete /> : <CheckCircle />}
       </button>
       <button
         type="button"

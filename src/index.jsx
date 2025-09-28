@@ -155,7 +155,13 @@ subscribe(APP_READY, () => {
                         path={route}
                         element={(
                           <DecodePageRoute>
-                            <CoursewareContainer />
+                            <NoTabContainer
+                              tab="courseware"
+                              fetch={fetchOutlineTab}
+                              slice="courseHome"
+                            >
+                              <CoursewareContainer />
+                            </NoTabContainer>
                           </DecodePageRoute>
                       )}
                       />

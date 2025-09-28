@@ -491,4 +491,5 @@ module.exports = {
   corePlugins: {
     preflight: false, // This will work properly in v3
   },
+  important: '#root',
 };

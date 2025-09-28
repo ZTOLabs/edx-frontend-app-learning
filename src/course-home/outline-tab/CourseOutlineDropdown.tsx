@@ -4,17 +4,23 @@ import { ChevronDown, ChevronRight } from '@untitledui/icons';
 import { Collapsible } from '@openedx/paragon';
 
 import classNames from 'classnames';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useModel } from '../../generic/model-store';
 import CourseOutlineSection from './CourseOutlineSection';
 
 const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
   const intl = useIntl();
-  const [isOutlineExpanded, setIsOutlineExpanded] = useState(false);
+  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [isOutlineExpanded, setIsOutlineExpanded] = useState(() => {
+    const isOnUnitPage = pathname.includes(`/course/${courseId}/`)
+      && !pathname.endsWith('/home')
+      && pathname !== `/course/${courseId}`;
+    return isOnUnitPage;
+  });
 
   const { tabs } = useModel('courseHomeMeta', courseId);
-  const tabsWithoutCourses = tabs.filter((tab) => tab.slug !== 'outline');
+  const tabsWithoutCourses = tabs.filter((tab) => !['outline', 'courseware'].includes(tab.slug));
 
   const {
     courseBlocks: { courses, sections },
@@ -23,24 +29,21 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
   const rootCourseId = courses && Object.keys(courses)[0];
   const sectionIds = rootCourseId ? courses[rootCourseId].sectionIds : [];
 
-  // Extract slug from current URL pathname
-  // Example: /course/course-v1:MITx+CS102+2025_T1/home -> "home"
-  const getCurrentSlug = () => {
-    const pathSegments = pathname.split('/');
-    return pathSegments[pathSegments.length - 1] || 'home';
+  // Check if we're on the course home page
+  // Example: /course/course-v1:MITx+CS102+2025_T1/home -> true
+  // Example: /course/course-v1:MITx+CS102+2025_T1/sequenceId/unitId -> false
+  const isHomeActive = pathname.endsWith('/home') || pathname === `/course/${courseId}`;
+
+  const handleTabClick = (tab) => {
+    if (tab && tab.url && tab.url !== '#') {
+      // All tabs in tabsWithoutCourses are external tabs (Progress, Dates, Discussion, etc.)
+      // that need full page navigation to different microfrontends
+      window.location.href = tab.url;
+    }
   };
 
-  const currentSlug = getCurrentSlug();
-  const isHomeActive = currentSlug === 'home';
-
-  const homeTab = tabsWithoutCourses.find(
-    (tab) => tab.url === window.location.href,
-  );
-
-  const handleTabClick = (url) => {
-    if (url && url !== '#') {
-      window.location.href = url;
-    }
+  const handleHomeClick = () => {
+    navigate(`/course/${courseId}/home`);
   };
 
   return (
@@ -49,12 +52,12 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
       <button
         type="button"
         className={classNames(
-          'tw-w-full tw-py-[10px] tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-rounded-[8px]',
+          'tw-w-full tw-py-[10px] tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]',
           {
-            'tw-bg-brand-100 tw-text-brand-700': isHomeActive,
+            '!tw-bg-brand-100 !tw-text-brand-700': isHomeActive,
           },
         )}
-        onClick={() => handleTabClick(homeTab?.url)}
+        onClick={handleHomeClick}
       >
         <span className="tw-text-sm tw-font-medium">
           {intl.formatMessage({
@@ -119,10 +122,10 @@ const CourseOutlineDropdown = ({ courseId }: { courseId: string }) => {
           className={classNames(
             'tw-w-full tw-py-[10px] tw-px-3 tw-h-[40px] tw-flex tw-items-center tw-text-left tw-transition-colors tw-border-0 tw-bg-transparent tw-text-gray-700 tw-rounded-[8px]',
             {
-              'tw-bg-brand-100 tw-text-brand-700': currentSlug === tab.slug,
+              '!tw-bg-brand-100 !tw-text-brand-700': pathname.endsWith(`/${tab.slug}`),
             },
           )}
-          onClick={() => handleTabClick(tab.url)}
+          onClick={() => handleTabClick(tab)}
         >
           <span className="tw-text-sm tw-font-medium">{tab.title}</span>
         </button>

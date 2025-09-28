@@ -12,7 +12,7 @@ import {
   getSequenceForUnitDeprecated,
   saveSequencePosition,
 } from './data';
-import { TabPage } from '../tab-page';
+import { TabPage } from '../custom-tab-page';
 
 import Course from './course';
 import { handleNextSectionCelebration } from './course/celebration';
@@ -303,14 +303,24 @@ class CoursewareContainer extends Component {
     );
   }
 
-  handleUnitNavigationClick = () => {
+  handleUnitNavigationClick = (destinationUnitId) => {
     const {
       courseId,
       sequenceId,
       routeUnitId,
+      navigate,
+      isPreview,
     } = this.props;
 
+    // Check completion for current unit before navigating
     this.props.checkBlockCompletion(courseId, sequenceId, routeUnitId);
+
+    // Navigate to the new unit
+    if (destinationUnitId) {
+      const baseUrl = `/course/${courseId}/${sequenceId}`;
+      const sequenceUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
+      navigate(`${sequenceUrl}/${destinationUnitId}`);
+    }
   };
 
   handleNextSequenceClick = () => {
@@ -319,6 +329,8 @@ class CoursewareContainer extends Component {
       nextSequence,
       sequence,
       sequenceId,
+      navigate,
+      isPreview,
     } = this.props;
 
     if (nextSequence !== null) {
@@ -326,10 +338,28 @@ class CoursewareContainer extends Component {
       if (celebrateFirstSection && sequence.sectionId !== nextSequence.sectionId) {
         handleNextSectionCelebration(sequenceId, nextSequence.id);
       }
+
+      // Navigate to the next sequence
+      const baseUrl = `/course/${this.props.courseId}`;
+      const courseUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
+      navigate(`${courseUrl}/${nextSequence.id}`);
     }
   };
 
-  handlePreviousSequenceClick = () => {};
+  handlePreviousSequenceClick = () => {
+    const {
+      previousSequence,
+      navigate,
+      isPreview,
+    } = this.props;
+
+    if (previousSequence !== null) {
+      // Navigate to the last unit of the previous sequence
+      const baseUrl = `/course/${this.props.courseId}`;
+      const courseUrl = isPreview ? `/preview${baseUrl}` : baseUrl;
+      navigate(`${courseUrl}/${previousSequence.id}/last`);
+    }
+  };
 
   render() {
     const {
